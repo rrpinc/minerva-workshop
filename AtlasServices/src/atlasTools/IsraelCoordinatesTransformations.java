@@ -76,12 +76,7 @@ package atlasTools;
 //===================================================================================================
 
 
-//import java.lang.*;
-//import java.text.*;
-//import java.util.*;
-import java.lang.Double;
-import java.lang.String;
-import java.lang.System;
+
 
 public class IsraelCoordinatesTransformations {
 	private static class Datum {

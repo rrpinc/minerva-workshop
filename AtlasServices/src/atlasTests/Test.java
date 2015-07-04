@@ -1,23 +1,19 @@
 package atlasTests;
 import java.util.ArrayList;
 
-import atlasService.DBConnection;
 import atlasService.DETECTIONS;
+import atlasService.DetectionsReader;
 
 
 public class Test {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		DBConnection con = new DBConnection();
-		con.Connect();
-		if(con.isConnected())
+		DetectionsReader reader = new DetectionsReader();
+
+		ArrayList<DETECTIONS> x = reader.getDETECTIONS(2, -1);
+		for(DETECTIONS l : x)
 		{
-			ArrayList<DETECTIONS> x = con.getDETECTIONS(2, -1);
-			for(DETECTIONS l : x)
-			{
-				System.out.println(l.getTAG());
-			}
+			System.out.println(l.getTAG());
 		}
 	}
 

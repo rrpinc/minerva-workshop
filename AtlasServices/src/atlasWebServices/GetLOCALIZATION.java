@@ -35,12 +35,10 @@ public class GetLOCALIZATION extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 
 		PrintWriter print = response.getWriter();		
-//		con.Connect();
 		Gson gson = new GsonBuilder().setPrettyPrinting()
 				.setDateFormat(DateFormat.FULL, DateFormat.FULL).create();
 		JsonResult<LOCALIZATIONS> json;
 		
-//		if (con.isConnected()) {
 		String tag_id = request.getParameter("tag");
 		String entries = request.getParameter("entries");
 		if (tag_id == null) {
