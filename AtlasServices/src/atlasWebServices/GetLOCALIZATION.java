@@ -21,7 +21,6 @@ import atlasService.LOCALIZATIONS;
 /**
  * Servlet implementation class GetLOCALIZATION
  */
-@WebServlet("/GetLOCALIZATION")
 public class GetLOCALIZATION extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private DBConnection con = new DBConnection();
