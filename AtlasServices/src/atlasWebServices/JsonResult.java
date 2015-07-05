@@ -3,8 +3,8 @@ package atlasWebServices;
 import java.util.ArrayList;
 
 public class JsonResult<T> {
-	private String Message;
-	private ArrayList<T> Results;
+	public String Message;
+	public ArrayList<T> Results;
 
 	public JsonResult(String msg, ArrayList<T> results) {
 		super();

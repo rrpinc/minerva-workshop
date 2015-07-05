@@ -16,21 +16,15 @@ import com.google.gson.GsonBuilder;
 import atlasService.LOCALIZATIONS;
 import atlasService.LocalizationsReader;
 
-/**
- * Servlet implementation class GetLOCALIZATION
- */
-public class GetLOCALIZATION extends HttpServlet {
+public class GetLOCALIZATION extends HttpServlet
+{
 	private static final long serialVersionUID = 1L;
 	private LocalizationsReader localizationsReader = new LocalizationsReader();
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
 	public GetLOCALIZATION() {
 		super();
 	}
 
-	
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
@@ -41,12 +35,16 @@ public class GetLOCALIZATION extends HttpServlet {
 		
 		String tag_id = request.getParameter("tag");
 		String entries = request.getParameter("entries");
-		if (tag_id == null) {
+		
+		if (tag_id == null)
+		{
 			tag_id = "-1";
 		}
+		
 		if (entries == null) {
 			entries = "0";
 		}
+		
 		int id = -1, count = 0;
 		try {
 			id = Integer.parseInt(tag_id);
@@ -66,23 +64,14 @@ public class GetLOCALIZATION extends HttpServlet {
 		ArrayList<LOCALIZATIONS> result = localizationsReader.getLOCALIZATIONS(count, id);
 		if(result !=null)
 		{
-		json = new JsonResult<LOCALIZATIONS>(result.size() + " : Entries", result);
-		print.println(gson.toJson(json));
+			json = new JsonResult<LOCALIZATIONS>(result.size() + " : Entries", result);
+			print.println(gson.toJson(json));
 		}
 		else
 		{
-			json = new JsonResult<LOCALIZATIONS>("0 : Entries", null);
+			json = new JsonResult<LOCALIZATIONS>("Error : DB Connection Failed", null);
 			print.println(gson.toJson(json));
 		}
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 	}
 
 }

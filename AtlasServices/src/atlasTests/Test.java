@@ -13,7 +13,7 @@ public class Test {
 		ArrayList<DETECTIONS> x = reader.getDETECTIONS(2, -1);
 		for(DETECTIONS l : x)
 		{
-			System.out.println(l.getTAG());
+			System.out.println(l.TAG);
 		}
 	}
 
