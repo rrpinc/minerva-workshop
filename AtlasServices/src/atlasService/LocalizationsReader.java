@@ -18,7 +18,7 @@ public class LocalizationsReader extends DBConnection {
 		connection.Connect();
 	}
 	
-	public ArrayList<LOCALIZATIONS> getLOCALIZATIONS(int count, long TAG) {
+	public ArrayList<LOCALIZATIONS> getLOCALIZATIONS(int count, long TAG) throws SQLException {
 		if (count < 1)
 			return new ArrayList<LOCALIZATIONS>();
 
@@ -88,11 +88,8 @@ public class LocalizationsReader extends DBConnection {
 		}
 		
 		finally {
-			try {
+			if (connection.isConnected())
 				connection.mConn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 		}
 
 	}
