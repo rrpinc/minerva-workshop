@@ -15,6 +15,8 @@ import atlasService.Tag;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 public class GetAvailableTags extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -31,7 +33,6 @@ public class GetAvailableTags extends HttpServlet {
 		PrintWriter print = response.getWriter();		
 		Gson gson = new GsonBuilder().setPrettyPrinting()
 				.setDateFormat(DateFormat.FULL, DateFormat.FULL).create();
-		JsonResult<Tag> json;
 
 		ArrayList<Tag> tags = tagsReader.getAvailableTags(); 
 		
@@ -40,7 +41,12 @@ public class GetAvailableTags extends HttpServlet {
 		if(tags != null)
 		{
 			tagResults result = MapTags(tags);
-			print.println(gson.toJson(result));
+			
+			JsonElement je = gson.toJsonTree(result);
+		    JsonObject jo = new JsonObject();
+		    jo.add("tagResults", je);
+			
+			print.println(gson.toJson(jo));
 		}
 		else
 		{
