@@ -14,8 +14,6 @@ public class LocalizationsReader extends DBConnection {
 	
 	public LocalizationsReader()
 	{
-		connection = new DBConnection();
-		connection.Connect();
 	}
 	
 	public ArrayList<Localization> getLocalizations(int count, long tag) throws SQLException
@@ -24,6 +22,10 @@ public class LocalizationsReader extends DBConnection {
 			return new ArrayList<Localization>();
 
 		try {
+			
+			connection = new DBConnection();
+			connection.Connect();
+			
 			if (!connection.isConnected())
 			{
 				return null;

@@ -11,13 +11,14 @@ public class AvailableTagsReader extends DBConnection {
 	
 	public AvailableTagsReader()
 	{
-		connection = new DBConnection();
-		connection.Connect();
 	}
 	
 	public ArrayList<Tag> getAvailableTags()
 	{
 		try {
+			connection = new DBConnection();
+			connection.Connect();
+			
 			if (!connection.isConnected())
 			{
 				return null;
