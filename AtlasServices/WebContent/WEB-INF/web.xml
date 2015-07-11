@@ -9,7 +9,7 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
-   <servlet>
+  <servlet>
     <description></description>
     <display-name>GetLOCALIZATION</display-name>
     <servlet-name>GetLOCALIZATION</servlet-name>
@@ -18,5 +18,15 @@
   <servlet-mapping>
     <servlet-name>GetLOCALIZATION</servlet-name>
     <url-pattern>/GetLOCALIZATION</url-pattern>
+  </servlet-mapping>
+  <servlet>
+  	<description>description</description>
+  	<display-name>GetAvailableTags</display-name>
+  	<servlet-name>GetAvailableTags</servlet-name>
+  	<servlet-class>atlasWebServices.GetAvailableTags</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GetAvailableTags</servlet-name>
+  	<url-pattern>/GetAvailableTags</url-pattern>
   </servlet-mapping>
 </web-app>

@@ -15,12 +15,12 @@ public class DetectionsReader {
 		connection.Connect();
 	}
 	
-	public ArrayList<DETECTIONS> getDETECTIONS(int count, long TAG) {
+	public ArrayList<Detections> getDETECTIONS(int count, long TAG) {
 		if (count < 1)
 			return null;
 		try {
 			if (!connection.isConnected()) {
-				return new ArrayList<DETECTIONS>();
+				return new ArrayList<Detections>();
 			}
 			String query = "SELECT * FROM DETECTIONS ORDER BY TIME DESC LIMIT "
 					+ count;
@@ -29,9 +29,9 @@ public class DetectionsReader {
 						+ " ORDER BY TIME DESC LIMIT " + count;
 			Statement st = connection.mConn.createStatement();
 			ResultSet rs = st.executeQuery(query);
-			ArrayList<DETECTIONS> ret = new ArrayList<DETECTIONS>();
+			ArrayList<Detections> ret = new ArrayList<Detections>();
 			while (rs.next()) {
-				DETECTIONS tmp = new DETECTIONS(rs.getLong("TIME_GROUP"),
+				Detections tmp = new Detections(rs.getLong("TIME_GROUP"),
 						rs.getInt("BS"), rs.getLong("TAG"), rs.getLong("TX"),
 						rs.getDouble("TIME"), rs.getDouble("SAMPLES_CLK"),
 						rs.getFloat("SNR"), rs.getFloat("RSSI"),

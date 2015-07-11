@@ -2,6 +2,7 @@ package atlasWebServices;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 
@@ -13,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import atlasService.LOCALIZATIONS;
+import atlasService.Localization;
 import atlasService.LocalizationsReader;
 
 public class GetLOCALIZATION extends HttpServlet
@@ -31,7 +32,7 @@ public class GetLOCALIZATION extends HttpServlet
 		PrintWriter print = response.getWriter();		
 		Gson gson = new GsonBuilder().setPrettyPrinting()
 				.setDateFormat(DateFormat.FULL, DateFormat.FULL).create();
-		JsonResult<LOCALIZATIONS> json;
+		JsonResult<Localization> json;
 		
 		String tag_id = request.getParameter("tag");
 		String entries = request.getParameter("entries");
@@ -49,27 +50,33 @@ public class GetLOCALIZATION extends HttpServlet
 		try {
 			id = Integer.parseInt(tag_id);
 		} catch (Exception e) {
-			json = new JsonResult<LOCALIZATIONS>("Invalid input: tag id", null);
+			json = new JsonResult<Localization>("Invalid input: tag id", null);
 			print.println(gson.toJson(json));
 			return;
 		}
 		try {
 			count = Integer.parseInt(entries);
 		} catch (Exception e) {
-			json = new JsonResult<LOCALIZATIONS>("Invalid input: entries", null);
+			json = new JsonResult<Localization>("Invalid input: entries", null);
 			print.println(gson.toJson(json));
 			return;
 		}
 
-		ArrayList<LOCALIZATIONS> result = localizationsReader.getLOCALIZATIONS(count, id);
-		if(result !=null)
+		ArrayList<Localization> result = null;
+		try {
+			result = localizationsReader.getLocalizations(count, id);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if(result != null)
 		{
-			json = new JsonResult<LOCALIZATIONS>(result.size() + " : Entries", result);
+			json = new JsonResult<Localization>(result.size() + " : Entries", result);
 			print.println(gson.toJson(json));
 		}
 		else
 		{
-			json = new JsonResult<LOCALIZATIONS>("Error : DB Connection Failed", null);
+			json = new JsonResult<Localization>("Error : DB Connection Failed", null);
 			print.println(gson.toJson(json));
 		}
 	}
