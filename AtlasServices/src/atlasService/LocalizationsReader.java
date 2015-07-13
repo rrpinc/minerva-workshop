@@ -63,7 +63,7 @@ public class LocalizationsReader extends DBConnection {
 					.itm2wgs84(new double[] { rs.getDouble("Y"),
 							rs.getDouble("X") });
 			String sql_time = rs.getString("TIME");
-			String sql_milisecond = sql_time.indexOf('.') < 0 || sql_time.indexOf('.')==sql_time.length()-1 ?
+			String sql_milisecond = (sql_time.indexOf('.') < 0 || sql_time.indexOf('.') ==sql_time.length()-1) ?
 					"000000":sql_time.substring(sql_time.indexOf('.')+1);
 			sql_time = sql_time.substring(0,
 					sql_time.indexOf('.') <= 0 ?
@@ -88,11 +88,10 @@ public class LocalizationsReader extends DBConnection {
 					sql_milisecond+="00";
 				else if (sql_milisecond.length()==0)
 					sql_milisecond+="000";
-//				mili=Long.parseLong(sql_milisecond);
 			}
 			catch(Exception e)
 			{
-//				mili = 0;
+				
 			}
 			
 			Date time = null;

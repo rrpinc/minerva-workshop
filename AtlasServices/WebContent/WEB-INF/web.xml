@@ -20,13 +20,23 @@
     <url-pattern>/GetLOCALIZATION</url-pattern>
   </servlet-mapping>
   <servlet>
-  	<description>description</description>
-  	<display-name>GetAvailableTags</display-name>
-  	<servlet-name>GetAvailableTags</servlet-name>
-  	<servlet-class>atlasWebServices.GetAvailableTags</servlet-class>
+    <description>description</description>
+    <display-name>GetAvailableTags</display-name>
+    <servlet-name>GetAvailableTags</servlet-name>
+    <servlet-class>atlasWebServices.GetAvailableTags</servlet-class>
   </servlet>
   <servlet-mapping>
-  	<servlet-name>GetAvailableTags</servlet-name>
-  	<url-pattern>/GetAvailableTags</url-pattern>
+    <servlet-name>GetAvailableTags</servlet-name>
+    <url-pattern>/GetAvailableTags</url-pattern>
+  </servlet-mapping>
+  <servlet>
+  	<description>description</description>
+  	<display-name>SimulateTagLocalizations</display-name>
+  	<servlet-name>SimulateTagLocalizations</servlet-name>
+  	<servlet-class>atlasWebServices.SimulateTagLocalizations</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>SimulateTagLocalizations</servlet-name>
+  	<url-pattern>/SimulateTagLocalizations</url-pattern>
   </servlet-mapping>
 </web-app>

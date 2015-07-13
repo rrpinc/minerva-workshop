@@ -11,5 +11,4 @@ public class JsonResult<T> {
 		Message = msg;
 		Results = results;
 	}
-
 }

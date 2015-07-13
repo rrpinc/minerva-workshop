@@ -1,19 +1,55 @@
 package atlasService;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class TagSimulator
 {
+	private static double EarthRadius = 6378.137; // Radius of earth in KM 
 	
-	
-	private double CalculateDeltaInMeters(double lat1, double long1, double lat2, double long2)
+	private Location LatLongToXYZ(double lat, double lon)
 	{
-		    double earthRadiusKM = 6378.137; // Radius of earth in KM
-		    double deltaLat = (lat2 - lat1) * Math.PI / 180;
-		    double deltaLong = (long2 - long1) * Math.PI / 180;
-		    double a = Math.sin(deltaLat/2) * Math.sin(deltaLat/2) +
-		    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-		    Math.sin(deltaLong/2) * Math.sin(deltaLong/2);
-		    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-		    double d = earthRadiusKM * c;
-		    return d * 1000; // meters
+	    double latitude = lat * Math.PI / 180;
+	    double longtitude = lon * Math.PI / 180;
+	    double x = -EarthRadius * Math.cos(latitude) * Math.cos(longtitude);
+	    double y =  EarthRadius * Math.sin(latitude); 
+	    double z =  EarthRadius * Math.cos(latitude) * Math.sin(longtitude);
+	    
+	    return new Location(lat, lon, x, y, z);
+	}
+	
+	private Location calculateNextLocation(Location loc)
+	{
+		Random rand = new Random();
+		int minAngle = 180;
+		int maxAngle = 360;
+		int randomAngle = rand.nextInt((maxAngle - minAngle) + 1) + minAngle;
+		double bearing = Math.toRadians(randomAngle);
+		double distance = 5;// #Distance in km
+
+		double lat1 = Math.toRadians(loc.Latitude);
+		double lon1 = Math.toRadians(loc.Longtitude);
+
+		double lat2 = Math.asin(Math.sin(lat1) * Math.cos(distance / EarthRadius) +
+		     Math.cos(lat1) * Math.sin(distance / EarthRadius) * Math.cos(bearing));
+
+		double lon2 = lon1 + Math.atan2(Math.sin(bearing) * Math.sin(distance / EarthRadius) * Math.cos(lat1),
+		             Math.cos(distance / EarthRadius) - Math.sin(lat1) *Math.sin(lat2));
+
+		lat2 = Math.toDegrees(lat2);
+		lon2 = Math.toDegrees(lon2);
+		
+		return LatLongToXYZ(lat2, lon2);
+	}
+	
+	public ArrayList<Location> SimulateTagLocalizations(int timePeriodInHours, int resultsPerHour, double velocity)
+	{
+		Location startPoint = new Location(33.120675660801325, 35.59343085169261, 255753.1501, 780658.9078, 70);
+		
+		Location l = calculateNextLocation(startPoint);
+		ArrayList<Location> simulations = new ArrayList<Location>();
+		simulations.add(l);
+		
+		return simulations;
 	}
 }
