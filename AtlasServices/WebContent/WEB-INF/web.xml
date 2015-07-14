@@ -11,13 +11,13 @@
   </welcome-file-list>
   <servlet>
     <description></description>
-    <display-name>GetLOCALIZATION</display-name>
-    <servlet-name>GetLOCALIZATION</servlet-name>
-    <servlet-class>atlasWebServices.GetLOCALIZATION</servlet-class>
+    <display-name>GetLocalizations</display-name>
+    <servlet-name>GetLocalizations</servlet-name>
+    <servlet-class>atlasWebServices.GetLocalizations</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>GetLOCALIZATION</servlet-name>
-    <url-pattern>/GetLOCALIZATION</url-pattern>
+    <servlet-name>GetLocalizations</servlet-name>
+    <url-pattern>/GetLocalizations</url-pattern>
   </servlet-mapping>
   <servlet>
     <description>description</description>

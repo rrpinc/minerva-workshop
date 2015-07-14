@@ -18,14 +18,13 @@ public class TagSimulator
 	    return new Location(lat, lon, x, y, z);
 	}
 	
-	private Location calculateNextLocation(Location loc)
+	private Location calculateNextLocation(Location loc, double distance)
 	{
 		Random rand = new Random();
-		int minAngle = 180;
+		int minAngle = 0;
 		int maxAngle = 360;
 		int randomAngle = rand.nextInt((maxAngle - minAngle) + 1) + minAngle;
 		double bearing = Math.toRadians(randomAngle);
-		double distance = 5;// #Distance in km
 
 		double lat1 = Math.toRadians(loc.Latitude);
 		double lon1 = Math.toRadians(loc.Longtitude);
@@ -40,15 +39,22 @@ public class TagSimulator
 		lon2 = Math.toDegrees(lon2);
 		
 		return LatLongToXYZ(lat2, lon2);
-	}
+	} 
 	
 	public ArrayList<Location> SimulateTagLocalizations(int timePeriodInHours, int resultsPerHour, double velocity)
 	{
+		int resultsCount = timePeriodInHours * resultsPerHour;
+		double stepDistance = velocity / resultsCount;
+
 		Location startPoint = new Location(33.120675660801325, 35.59343085169261, 255753.1501, 780658.9078, 70);
-		
-		Location l = calculateNextLocation(startPoint);
 		ArrayList<Location> simulations = new ArrayList<Location>();
-		simulations.add(l);
+		
+		Location nextPoint = startPoint;
+		for(int i = 0; i < resultsCount; i++)
+		{
+			simulations.add(nextPoint);
+			nextPoint = calculateNextLocation(nextPoint, stepDistance);
+		}		
 		
 		return simulations;
 	}

@@ -17,12 +17,13 @@ import com.google.gson.GsonBuilder;
 import atlasService.Localization;
 import atlasService.LocalizationsReader;
 
-public class GetLOCALIZATION extends HttpServlet
+public class GetLocalizations extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
 	private LocalizationsReader localizationsReader = new LocalizationsReader();
+	private QueryStringParser paramParser;
 
-	public GetLOCALIZATION() {
+	public GetLocalizations() {
 		super();
 	}
 
@@ -33,30 +34,12 @@ public class GetLOCALIZATION extends HttpServlet
 		Gson gson = new GsonBuilder().setPrettyPrinting()
 				.setDateFormat(DateFormat.FULL, DateFormat.FULL).create();
 		JsonResult<Localization> json;
+		paramParser = new QueryStringParser(request);
+		int id = paramParser.GetValueOrDefault("tag", -1);
+		int limit = paramParser.GetValueOrDefault("entries", 0);
 		
-		String tag_id = request.getParameter("tag");
-		String entries = request.getParameter("entries");
-		
-		if (tag_id == null)
+		if (limit == 0)
 		{
-			tag_id = "-1";
-		}
-		
-		if (entries == null) {
-			entries = "0";
-		}
-		
-		int id = -1, count = 0;
-		try {
-			id = Integer.parseInt(tag_id);
-		} catch (Exception e) {
-			json = new JsonResult<Localization>("Invalid input: tag id", null);
-			print.println(gson.toJson(json));
-			return;
-		}
-		try {
-			count = Integer.parseInt(entries);
-		} catch (Exception e) {
 			json = new JsonResult<Localization>("Invalid input: entries", null);
 			print.println(gson.toJson(json));
 			return;
@@ -64,7 +47,7 @@ public class GetLOCALIZATION extends HttpServlet
 
 		ArrayList<Localization> result = null;
 		try {
-			result = localizationsReader.getLocalizations(count, id);
+			result = localizationsReader.getLocalizations(limit, id);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
