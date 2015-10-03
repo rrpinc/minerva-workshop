@@ -48,7 +48,7 @@ public class LocalizationsReader extends DBConnection {
 			cal.add(Calendar.MINUTE, -minutes);
 			
 			String query = 
-				"SELECT * FROM LOCALIZATIONS WHERE TIME >" + dateFormat.format(cal.getTime()) + " ORDER BY TIME DESC";
+				"SELECT * FROM LOCALIZATIONS WHERE TIME > '" + dateFormat.format(cal.getTime()) + "' ORDER BY TIME DESC";
 			
 			return Read(query);
 		}
