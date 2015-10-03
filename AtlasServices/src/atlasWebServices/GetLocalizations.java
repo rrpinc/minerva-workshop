@@ -37,18 +37,24 @@ public class GetLocalizations extends HttpServlet
 		paramParser = new QueryStringParser(request);
 		int id = paramParser.GetValueOrDefault("tag", -1);
 		int limit = paramParser.GetValueOrDefault("entries", 0);
+		int minutes = paramParser.GetValueOrDefault("minutes", 0);
 		
-		if (limit == 0)
+		if (limit <= 0 && minutes <= 0)
 		{
-			json = new JsonResult<Localization>("Invalid input: entries", null);
+			json = new JsonResult<Localization>("Invalid input: entries or minutes must be greater than zero", null);
 			print.println(gson.toJson(json));
 			return;
 		}
 
 		ArrayList<Localization> result = null;
-		try {
-			result = localizationsReader.getLocalizations(limit, id);
-		} catch (SQLException e) {
+		try
+		{
+			result = (limit > 0 || id > 0) ?
+				localizationsReader.getLocalizations(limit, id) :
+				localizationsReader.getLocalizationsByTime(minutes);
+		}
+		catch (SQLException e)
+		{
 			e.printStackTrace();
 		}
 		

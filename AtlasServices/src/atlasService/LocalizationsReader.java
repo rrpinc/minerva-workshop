@@ -4,7 +4,10 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import atlasTools.IsraelCoordinatesTransformations;
 
@@ -12,17 +15,54 @@ public class LocalizationsReader extends DBConnection {
 	
 	private DBConnection connection;
 	
-	public LocalizationsReader()
-	{
-	}
-	
 	public ArrayList<Localization> getLocalizations(int count, long tag) throws SQLException
 	{
 		if (count < 1)
 			return new ArrayList<Localization>();
 
-		try {
+		try
+		{
+			String query = (tag >= 0) ? 
+				"SELECT * FROM LOCALIZATIONS WHERE TAG=" + tag
+				+ " ORDER BY TIME DESC LIMIT " + count :
+				"SELECT * FROM LOCALIZATIONS ORDER BY TIME DESC LIMIT " + count;
 			
+			return Read(query);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public ArrayList<Localization> getLocalizationsByTime(int minutes) throws SQLException
+	{
+		if (minutes < 1)
+			return new ArrayList<Localization>();
+
+		try
+		{
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.MINUTE, -minutes);
+			
+			String query = 
+				"SELECT * FROM LOCALIZATIONS WHERE TIME >" + dateFormat.format(cal.getTime()) + " ORDER BY TIME DESC";
+			
+			return Read(query);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private ArrayList<Localization> Read(String query) throws SQLException
+	{
+		try
+		{
 			connection = new DBConnection();
 			connection.Connect();
 			
@@ -31,29 +71,25 @@ public class LocalizationsReader extends DBConnection {
 				return null;
 			}
 			
-			String query = (tag >= 0) ? 
-				"SELECT * FROM LOCALIZATIONS WHERE TAG=" + tag
-				+ " ORDER BY TIME DESC LIMIT " + count :
-				"SELECT * FROM LOCALIZATIONS ORDER BY TIME DESC LIMIT " + count;
-			
 			Statement st = connection.mConn.createStatement();
 			ResultSet rs = st.executeQuery(query);
 			
 			ArrayList<Localization> ret = ParseResult(rs);
 			st.close();
-			
 			return ret;
-		} catch (SQLException e) {
-			e.printStackTrace();
+		}
+		catch (SQLException e)
+		{
 			return null;
 		}
 		
-		finally {
+		finally
+		{
 			if (connection.isConnected())
 				connection.mConn.close();
 		}
-
 	}
+
 	
 	private ArrayList<Localization> ParseResult(ResultSet rs) throws SQLException
 	{
@@ -70,16 +106,18 @@ public class LocalizationsReader extends DBConnection {
 						sql_time.length() - 1
 						: sql_time.indexOf('.'));
 			
-//			long mili=0;
 			long time_parse = 0;
-			try{
+			try
+			{
 			 time_parse = Long.parseLong(sql_time);
 			}
 			catch(Exception e)
 			{
 				time_parse=0;
 			}
-			try{
+			
+			try
+			{
 				if(sql_milisecond.length()>3)
 					sql_milisecond=sql_milisecond.substring(0,3);
 				else if (sql_milisecond.length()==2)
@@ -106,7 +144,5 @@ public class LocalizationsReader extends DBConnection {
 		}
 		
 		return result;
-
 	}
-
 }
