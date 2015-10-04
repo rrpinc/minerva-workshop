@@ -36,19 +36,20 @@ public class LocalizationsReader extends DBConnection {
 		}
 	}
 	
-	public ArrayList<Localization> getLocalizationsByTime(int minutes) throws SQLException
+	public ArrayList<Localization> getLocalizationsByTime(int minutes, long tag) throws SQLException
 	{
 		if (minutes < 1)
 			return new ArrayList<Localization>();
 
 		try
 		{
-			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Calendar cal = Calendar.getInstance();
 			cal.add(Calendar.MINUTE, -minutes);
 			
-			String query = 
-				"SELECT * FROM LOCALIZATIONS WHERE TIME > '" + dateFormat.format(cal.getTime()) + "' ORDER BY TIME DESC";
+			String tagSelector = (tag > 0) ? "TAG = " + tag + " AND ": "";
+			
+			String query =
+				"SELECT * FROM LOCALIZATIONS WHERE " + tagSelector + "TIME >= " + cal.getTimeInMillis()/1000L+ " ORDER BY TIME DESC LIMIT 2000";
 			
 			return Read(query);
 		}
@@ -99,8 +100,11 @@ public class LocalizationsReader extends DBConnection {
 					.itm2wgs84(new double[] { rs.getDouble("Y"),
 							rs.getDouble("X") });
 			String sql_time = rs.getString("TIME");
-			String sql_milisecond = (sql_time.indexOf('.') < 0 || sql_time.indexOf('.') ==sql_time.length()-1) ?
-					"000000":sql_time.substring(sql_time.indexOf('.')+1);
+			String sql_milisecond = 
+					(sql_time.indexOf('.') < 0 || sql_time.indexOf('.') == sql_time.length()-1) ?
+					"000000" :
+					sql_time.substring(sql_time.indexOf('.')+1);
+			
 			sql_time = sql_time.substring(0,
 					sql_time.indexOf('.') <= 0 ?
 						sql_time.length() - 1

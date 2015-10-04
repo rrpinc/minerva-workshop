@@ -49,9 +49,9 @@ public class GetLocalizations extends HttpServlet
 		ArrayList<Localization> result = null;
 		try
 		{
-			result = (limit > 0 || id > 0) ?
+			result = (limit > 0) ?
 				localizationsReader.getLocalizations(limit, id) :
-				localizationsReader.getLocalizationsByTime(minutes);
+				localizationsReader.getLocalizationsByTime(minutes, id);
 		}
 		catch (SQLException e)
 		{
