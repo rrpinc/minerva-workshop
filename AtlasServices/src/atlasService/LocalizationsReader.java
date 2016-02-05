@@ -13,6 +13,7 @@ import atlasTools.IsraelCoordinatesTransformations;
 
 public class LocalizationsReader extends DBConnection {
 	
+	private static final double TO_MINUTS = 0;
 	private DBConnection connection;
 	
 	public ArrayList<Localization> getLocalizations(int count, long tag) throws SQLException
@@ -50,6 +51,28 @@ public class LocalizationsReader extends DBConnection {
 			
 			String query =
 				"SELECT * FROM LOCALIZATIONS WHERE " + tagSelector + "TIME >= " + cal.getTimeInMillis()/1000L+ " ORDER BY TIME DESC LIMIT 2000";
+			
+			return Read(query);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public ArrayList<Localization> getLocalizationsByTimeDelta(long start ,long end, long tag) throws SQLException
+	{
+		
+		if ((end-start)/1000L < 1)
+			return new ArrayList<Localization>();
+
+		try
+		{
+			String tagSelector = (tag > 0) ? "TAG = " + tag + " AND ": "";
+			
+			String query =
+				"SELECT * FROM LOCALIZATIONS WHERE " + tagSelector + "TIME >= " + start/1000L + " AND TIME <= " + end/1000L + " ORDER BY TIME DESC LIMIT 2000";
 			
 			return Read(query);
 		}

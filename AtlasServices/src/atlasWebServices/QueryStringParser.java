@@ -28,6 +28,15 @@ public class QueryStringParser
 		}
 	}
 	
+	public String GetValueOrNull(String paramName)
+	{
+		String param = request.getParameter(paramName);
+		if (param == null)
+			return "null";
+		
+		return param;
+	}
+	
 	public double GetValueOrDefault(String paramName, double defaultValue)
 	{
 		String param = request.getParameter(paramName);

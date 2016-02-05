@@ -39,4 +39,24 @@
   	<servlet-name>SimulateTagLocalizations</servlet-name>
   	<url-pattern>/SimulateTagLocalizations</url-pattern>
   </servlet-mapping>
+  <servlet>
+  	<description>description</description>
+  	<display-name>GetDetections</display-name>
+  	<servlet-name>GetDetections</servlet-name>
+  	<servlet-class>atlasWebServices.GetDetections</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>GetDetections</servlet-name>
+  	<url-pattern>/GetDetections</url-pattern>
+  </servlet-mapping>
+    <servlet>
+  	<description>description</description>
+  	<display-name>Login</display-name>
+  	<servlet-name>Login</servlet-name>
+  	<servlet-class>atlasWebServices.Login</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>Login</servlet-name>
+  	<url-pattern>/Login</url-pattern>
+  </servlet-mapping>
 </web-app>
