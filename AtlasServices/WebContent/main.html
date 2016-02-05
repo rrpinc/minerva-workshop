@@ -1,0 +1,84 @@
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="jquery-1.11.2.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link href="atlas.min.css" rel="stylesheet" type="text/css" />
+    <link href="static/style.css" rel="stylesheet" type="text/css" />
+	<script src="atlasMain.js"></script>
+    <script src="atlas.min.js"></script>
+    <script src="static/script.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+	<style type="text/css">
+		.bs-example{
+			margin: 5px;
+		}
+	</style>
+	<script src= "https://cdn.zingchart.com/zingchart.min.js"></script>
+	<script> zingchart.MODULESDIR = "https://cdn.zingchart.com/modules/";
+			ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9","ee6b7db5b51705a13dc2339db3edaf6d"];
+	</script>
+  </head>
+  <body>
+    <div id="sidedrawer" class="atlas--no-user-select">
+      <div id="sidedrawer-brand" class="atlas--appbar-line-height atlas--text-title">Atlas</div>
+      <div class="atlas-divider"></div>
+      <ul>
+        <li>
+          <strong>Manage tags</strong>
+          <ul>
+            <li><a href="#">Add tag</a></li>
+            <li><a href="#">Remove tag</a></li>
+            <li><a href="#">show all tags</a></li>
+          </ul>
+        </li>
+        <li>
+          <strong><a id="logout">Log out</a></strong>
+        </li>
+		<li>
+		<div id = "thetext"></div>
+		</li>
+      </ul>
+    </div>
+    <header id="header">
+      <div class="atlas-appbar atlas--appbar-line-height">
+        <div class="atlas-container-fluid">
+          <a class="sidedrawer-toggle atlas--visible-xs-inline-block atlas--visible-sm-inline-block js-show-sidedrawer">☰</a>
+          <a class="sidedrawer-toggle atlas--hidden-xs atlas--hidden-sm js-hide-sidedrawer">☰</a>
+		  <!-- Centered Pills -->
+<ul class="nav nav-tabs nav-justified" id="MyTabs">
+  <li  class="active"><a data-toggle="tab" href="#Map" id="#MapTab"><b>Map</b></a></li>
+  <li><a data-toggle="tab" href="#Monitor" id="#MonitorTab" ><b>Monitor</b></a></li>
+</ul>
+        </div>
+      </div>
+		  			
+<div class="tab-content">
+        <div class="tab-pane fade" id="Map">Content inside tab Map</div>
+        <div class="tab-pane fade" id="Monitor"></div>
+		
+    </div>
+    </header>
+
+    <div id="content-wrapper">
+
+      <div class="atlas--appbar-height"></div>
+      <div class="atlas-container-fluid">
+        <br>
+
+      </div>
+    </div>
+    <footer id="footer">
+      <div class="atlas-container-fluid"><br><font color="black">
+        <form onsubmit='return false;'>Start Time:<input type="datetime-local" id="startTime"> &nbsp&nbsp&nbsp End Time:<input type="datetime-local" id="endTime" name="endtime"> &nbsp&nbsp&nbsp 
+<button id="refreshButton">refresh</button></form>
+        </font>
+      </div>
+    </footer>
+  </body>
+</html>

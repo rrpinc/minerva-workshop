@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="css/style.css">
+	<script src="jquery-1.11.2.min.js"></script>
+	<script src="login.js"></script>
+  </head>
+
+  <body>
+
+    <div class="container">
+  <div id="login-form">
+    <h3>Login</h3>
+
+    <fieldset>
+
+      <form action="javascript:void(0);" method="get">
+
+        <input type="email" id="email" name="email" required value="Email" onBlur="if(this.value=='')this.value='Email'" onFocus="if(this.value=='Email')this.value='' "> <!-- JS because of IE support; better: placeholder="Email" -->
+
+        <input type="password" id="pwd" name="pwd" required value="Password" onBlur="if(this.value=='')this.value='Password'" onFocus="if(this.value=='Password')this.value='' "> <!-- JS because of IE support; better: placeholder="Password" -->
+
+        <input type="submit" value="Login" id="login">
+
+      </form>
+
+    </fieldset>
+
+  </div> <!-- end login-form -->
+
+</div>
+    
+    <div id="output"></div>
+    
+    
+    
+  </body>
+</html>
