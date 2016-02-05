@@ -21,6 +21,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import org.apache.commons.io.IOUtils;
+
 
 public class GetDetections extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -44,14 +47,9 @@ public class GetDetections extends HttpServlet {
 		String detectionsArr = null; 
 		JsonResult<Detections> json;
 		paramParser = new QueryStringParser(request);
-		long startTime = (long)paramParser.GetValueOrDefault("startTime", 0);
-		long endTime = (long)paramParser.GetValueOrDefault("endTime", 0);
+		int startTime = paramParser.GetValueOrDefault("startTime", 0);
+		int endTime = paramParser.GetValueOrDefault("endTime", 0);	
 		
-//		long startTime = paramParser.GetValueOrDefault("startTime", 0);
-//		long endTime = paramParser.GetValueOrDefault("endTime", 0);
-		
-//    	long startTime = Long.parseLong(request.getParameter("startTime"));
-//    	long endTime = Long.parseLong(request.getParameter("endTime"));
     	
 		if (startTime <= 0 || startTime > System.currentTimeMillis() || endTime <= 0 || endTime > System.currentTimeMillis())
 		{
@@ -67,6 +65,8 @@ public class GetDetections extends HttpServlet {
 			
 			JsonObject responseJson = new JsonObject();
 			responseJson.addProperty("detectionsArr", detectionsArr);
+
+			response.setHeader("Access-Control-Allow-Origin", "*");
 		    response.setContentType("application/json");
 		    response.setCharacterEncoding("UTF-8");
 		    String jsonn = new Gson().toJson(responseJson);
