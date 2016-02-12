@@ -1,45 +1,36 @@
-var pageContainer;
+var loggedin;
 
 $(document).ready(function() {
 
-	$("#refreshButton").on("click", refreshData);
-	$("#logout").click(logout);
+//TODO: return to if (loggedin)
+	if (1==1) {
+		$("#refreshButton").on("click", refreshData);
+		$("#logout").click(logout);
 
-	$('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
-        localStorage.setItem('activeTab', $(e.target).attr('href'));
-    });
-    var activeTab = localStorage.getItem('activeTab');
-    if(activeTab){
-        $('#MyTabs a[href="' + activeTab + '"]').tab('show');
-    }  
-	
+		$('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+			localStorage.setItem('activeTab', $(e.target).attr('href'));
+		});
+		var activeTab = localStorage.getItem('activeTab');
+		if(activeTab){
+			$('#MyTabs a[href="' + activeTab + '"]').tab('show');
+		}  
+	}
+	else {
+		window.location = "http://localhost:8080/AtlasServices/login.html"; 
+	}
 });
 
-function ajaxLogout() {
-    var retData = null;
-    $.ajax({
-        async: false,
-        type: 'GET',
-        url: 'Logout',
-        success: function(data) {
-            retData = data;
-        }
-    });
-    return retData;
-}
 
 function logout(){
-	var res = window.ajaxLogout();  
-	window.location = 'login.html'; 
+	loggedin=false;
+	window.location = "http://localhost:8080/AtlasServices/login.html"; 
 }
 function ajaxGetDetections(time) {
     var retData = null;
     $.ajax({
         async: false,
         type: 'GET',
-        dataType: 'json',
-        contentType: 'application/json; charset=UTF-8',
-        data: JSON.stringify(time),
+        data: time,
         url: "http://localhost:8080/AtlasServices/GetDetections",
         success: function(data) {
             retData = data;
@@ -53,11 +44,27 @@ function parseYMDHM(s) {
 }
 function refreshData(){
 					   
-	var RAWstartTime = parseYMDHM($("#startTime").val());
-	var startTime = RAWstartTime.getTime();
-	var RAWendTime = parseYMDHM($("#endTime").val());
-	var endTime = RAWendTime.getTime();
+	var method = $('input[name=method]:checked').val();
 	
+	if (method === "interval"){
+		var RAWstartTime = parseYMDHM($("#startTime").val());
+		startTime = RAWstartTime.getTime();
+		var RAWendTime = parseYMDHM($("#endTime").val());
+		endTime = RAWendTime.getTime();
+		showData(startTime, endTime);
+	}
+	else {
+		setInterval(function(){
+			var today = new Date();
+			startTime = today.getTime() - ($("#minutes").val())*60000;
+			endTime = today.getTime();
+			showData(startTime, endTime);
+			}, 1000);
+	}
+	
+}
+function showData(startTime, endTime){
+
 	var DELIMITER=1000;
 	var scaleXvalues=startTime+":"+endTime+":"+DELIMITER;
 	var time;
@@ -67,7 +74,7 @@ function refreshData(){
 	res = window.ajaxGetDetections(time);    
 	var NumOfDetections = res["detectionsArr"];
 	
-	//var NumOfDetections=[0, 0, 0, 0, 0, 0, 0, 0, 503, 321, 358, 198, 303, 224, 288];
+	//var NumOfDetections=[0, 0, 0, 0, 0, 0, 0, 0, 0, startTime%900, startTime%800, startTime%900, startTime%900, startTime%990, 0];
 	
 	zingchart.THEME = "classic";
 	var myConfig = {
@@ -158,4 +165,6 @@ function refreshData(){
       height: 400,
       width: 1000
     });
+	
+	
 }

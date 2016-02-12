@@ -9,10 +9,8 @@ function ajaxLogin(credentials) {
     $.ajax({
         async: false,
         type: 'GET',
-        dataType: 'json',
-        contentType: 'application/json; charset=UTF-8',
-        data: JSON.stringify(credentials),
-        url: 'Login',
+        data: credentials,
+        url: "http://localhost:8080/AtlasServices/Login",
         success: function(data) {
             retData = data;
         }
@@ -28,7 +26,8 @@ function checkLogin() {
         $("#email").val("");
 		$("#pwd").val("");
     } else {
-        window.location = 'main.html'; 
+    	loggedin=true;
+        window.location = "http://localhost:8080/AtlasServices/main.html"; 
     }
 }
 	

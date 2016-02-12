@@ -9,6 +9,11 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <link href="atlas.min.css" rel="stylesheet" type="text/css" />
     <link href="static/style.css" rel="stylesheet" type="text/css" />
+	<script type='text/javascript'>
+	var loggedin=false;
+	var startTime;
+	var endTime;
+	</script>
 	<script src="atlasMain.js"></script>
     <script src="atlas.min.js"></script>
     <script src="static/script.js"></script>
@@ -23,6 +28,8 @@
 	<script> zingchart.MODULESDIR = "https://cdn.zingchart.com/modules/";
 			ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9","ee6b7db5b51705a13dc2339db3edaf6d"];
 	</script>
+	
+	
   </head>
   <body>
     <div id="sidedrawer" class="atlas--no-user-select">
@@ -74,9 +81,14 @@
       </div>
     </div>
     <footer id="footer">
-      <div class="atlas-container-fluid"><br><font color="black">
-        <form onsubmit='return false;'>Start Time:<input type="datetime-local" id="startTime"> &nbsp&nbsp&nbsp End Time:<input type="datetime-local" id="endTime" name="endtime"> &nbsp&nbsp&nbsp 
-<button id="refreshButton">refresh</button></form>
+      <div class="atlas-container-fluid" id="container-fluid"><br><font color="black" size="2.3">
+        <form onsubmit='return false;'>
+		<input type="radio" name="method" value="interval">
+		Start Time:<input type="datetime-local" id="startTime"> &nbsp&nbsp&nbsp End Time:<input type="datetime-local" id="endTime" name="endtime"> &nbsp&nbsp&nbsp 
+<button id="refreshButton">show data</button>
+		<br>
+		<input type="radio" name="method" value="minutes"> Show the last <input type="number" id="minutes" style="width: 50px;" min="0" max="20" value="0"> minutes
+		</form>
         </font>
       </div>
     </footer>
