@@ -19,17 +19,29 @@
     <script src="static/script.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+    </script>
 	<style type="text/css">
 		.bs-example{
 			margin: 5px;
 		}
 	</style>
-	<script src= "https://cdn.zingchart.com/zingchart.min.js"></script>
-	<script> zingchart.MODULESDIR = "https://cdn.zingchart.com/modules/";
-			ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9","ee6b7db5b51705a13dc2339db3edaf6d"];
-	</script>
-	
-	
+	<script type='text/javascript'>
+		function check()
+		{
+			var ele = document.getElementsByName('method');
+			var flag=0;
+			for(var i=0;i<ele.length;i++)
+			{
+				if(ele[i].checked)
+				 flag=1;
+			} 
+			if(flag==1)
+			document.getElementById('refreshButton').disabled=false;
+		}
+		</script>
   </head>
   <body>
     <div id="sidedrawer" class="atlas--no-user-select">
@@ -66,7 +78,9 @@
       </div>
 		  			
 <div class="tab-content">
-        <div class="tab-pane fade" id="Map">Content inside tab Map</div>
+        <div class="tab-pane fade" id="Map">Content inside tab Map
+		
+</div>
         <div class="tab-pane fade" id="Monitor"></div>
 		
     </div>
@@ -83,11 +97,11 @@
     <footer id="footer">
       <div class="atlas-container-fluid" id="container-fluid"><br><font color="black" size="2.3">
         <form onsubmit='return false;'>
-		<input type="radio" name="method" value="interval">
+		<input type="radio" name="method" value="interval" onclick="check()">
 		Start Time:<input type="datetime-local" id="startTime"> &nbsp&nbsp&nbsp End Time:<input type="datetime-local" id="endTime" name="endtime"> &nbsp&nbsp&nbsp 
 <button id="refreshButton">show data</button>
 		<br>
-		<input type="radio" name="method" value="minutes"> Show the last <input type="number" id="minutes" style="width: 50px;" min="0" max="20" value="0"> minutes
+		<input type="radio" name="method" value="minutes" onclick="check()"> Show the last <input type="number" id="minutes" style="width: 50px;" min="0" max="20" value="0"> minutes
 		</form>
         </font>
       </div>
