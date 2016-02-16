@@ -60,7 +60,7 @@ public class DetectionsReader {
 	public ArrayList<Detections> getDETECTIONSbyTime(int count, long time) {
 		if (count < 1)
 			return null;
-		/*
+		
 		try {
 			if (!connection.isConnected()) {
 				return new ArrayList<Detections>();
@@ -68,8 +68,11 @@ public class DetectionsReader {
 			String query = "SELECT * FROM DETECTIONS ORDER BY TIME DESC LIMIT "
 					+ count;
 
+			/*
+			 * TIME>=time-500 AND TIME <time+500
+			 */
 			if (time >= 0 && time <= System.currentTimeMillis())
-				query = "SELECT * FROM DETECTIONS WHERE TIME=" + time
+				query = "SELECT * FROM DETECTIONS WHERE TIME>="+ (time-500) +" AND TIME <"+(time+500)
 				+ " LIMIT " + count;
 			Statement st = connection.mConn.createStatement();
 			ResultSet rs = st.executeQuery(query);
@@ -96,7 +99,7 @@ public class DetectionsReader {
 				e.printStackTrace();
 			}
 		}
-		*/
+		/*
 		ArrayList<Detections> ret = new ArrayList<Detections>();
 		
 		Detections tmp = new Detections(10000,
@@ -118,7 +121,7 @@ public class DetectionsReader {
 					2, 5);
 			ret.add(tmp);
 		
-		return ret;
+		return ret;*/
 	}
 	public String getDETECTIONSbyTime(int count, long startTime, long endTime) {
 		if (count < 1)
