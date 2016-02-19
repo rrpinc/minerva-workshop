@@ -27,7 +27,22 @@ public class QueryStringParser
 			return defaultValue;
 		}
 	}
-	
+	public long GetLongValueOrDefault(String paramName, long defaultValue)
+	{
+		String param = request.getParameter(paramName);
+		if (param == null)
+			return defaultValue;
+		
+		try
+		{
+			long parsedParam = Long.parseLong(param);
+			return parsedParam;
+		}
+		catch (Exception e)
+		{
+			return defaultValue;
+		}
+	}
 	public String GetValueOrNull(String paramName)
 	{
 		String param = request.getParameter(paramName);
