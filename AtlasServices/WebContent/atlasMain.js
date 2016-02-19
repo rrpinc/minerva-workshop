@@ -65,12 +65,10 @@ function refreshData(){
 }
 function showData(startTime, endTime){
 
-	var DELIMITER=60000;
-	var time;
-	var res;
+	var DELIMITER=1000;
 	
-	time = {startTime: startTime, endTime: endTime};
-	res = window.ajaxGetDetections(time);    
+	var time = {startTime: startTime, endTime: endTime};
+	var res = window.ajaxGetDetections(time);    
 	var NumOfDetections = res["detectionsArr"];	
       
 	var rows = [];
