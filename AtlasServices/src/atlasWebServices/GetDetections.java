@@ -21,18 +21,17 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import org.apache.commons.io.IOUtils;
-
 
 public class GetDetections extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    private DetectionsReader detectionsReader = new DetectionsReader();
+    private DetectionsReader detectionsReader;
     private QueryStringParser paramParser;
     private static final int LIMIT = 1000;
     
     public GetDetections() {
         super();
+    	detectionsReader = new DetectionsReader();
+
     }
 
 	
@@ -47,13 +46,13 @@ public class GetDetections extends HttpServlet {
 		String detectionsArr = null; 
 		JsonResult<Detections> json;
 		paramParser = new QueryStringParser(request);
-		int startTime = paramParser.GetValueOrDefault("startTime", 0);
-		int endTime = paramParser.GetValueOrDefault("endTime", 0);	
+		long startTime = (long)paramParser.GetLongValueOrDefault("startTime", 0);
+		long endTime = (long)paramParser.GetLongValueOrDefault("endTime", 0);
 		
     	
-		if (startTime <= 0 || startTime > System.currentTimeMillis() || endTime <= 0 || endTime > System.currentTimeMillis())
+		if (startTime <= 0 || endTime <= 0 )
 		{
-			json = new JsonResult<Detections>("Invalid input: entries must be greater than zero and valid", null);
+			json = new JsonResult<Detections>("Invalid input: entries must be greater than zero and valid : "+ startTime +" "+ endTime, null);
 			print.println(gson.toJson(json));
 			return;
 		}
@@ -65,8 +64,6 @@ public class GetDetections extends HttpServlet {
 			
 			JsonObject responseJson = new JsonObject();
 			responseJson.addProperty("detectionsArr", detectionsArr);
-
-			response.setHeader("Access-Control-Allow-Origin", "*");
 		    response.setContentType("application/json");
 		    response.setCharacterEncoding("UTF-8");
 		    String jsonn = new Gson().toJson(responseJson);
