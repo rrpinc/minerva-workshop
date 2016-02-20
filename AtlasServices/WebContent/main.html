@@ -78,9 +78,39 @@
       </div>
 		  			
 <div class="tab-content">
-        <div class="tab-pane fade" id="Map">Content inside tab Map
-		
-</div>
+        <div class="tab-pane fade" id="Map">
+        
+        
+          <style>
+          html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+          }
+          #google_map {
+            margin: 0;
+            padding: 0;
+            width: 1400px;
+            height: 600px;
+          }
+          </style>
+          <body>
+            <script type="text/javascript"
+              src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsyC68nnMUD5YNiLPdz_cEk-VdKaiTnWA&libraries=geometry,places">
+            </script>
+
+            <script src="googleMap.js">
+            </script>
+            <body>
+
+            <div id="google_map"></div>
+
+            </body>
+
+          </body>
+        </div>
+        
+        
         <div class="tab-pane fade" id="Monitor"></div>
 		
     </div>
@@ -99,7 +129,9 @@
         <form onsubmit='return false;'>
 		<input type="radio" name="method" value="interval" onclick="check()">
 		Start Time:<input type="datetime-local" id="startTime"> &nbsp&nbsp&nbsp End Time:<input type="datetime-local" id="endTime" name="endtime"> &nbsp&nbsp&nbsp 
-<button id="refreshButton">show data</button>
+			<button id="refreshButton">show data</button>
+			<button type="button" onclick="initMap()">Update Map!</button>
+			
 		<br>
 		<input type="radio" name="method" value="minutes" onclick="check()"> Show the last <input type="number" id="minutes" style="width: 50px;" min="0" max="20" value="0"> minutes
 		</form>
