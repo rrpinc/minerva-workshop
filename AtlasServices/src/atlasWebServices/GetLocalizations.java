@@ -15,7 +15,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
-import atlasService.Detections;
 import atlasService.Localization;
 import atlasService.LocalizationsReader;
 
@@ -39,6 +38,8 @@ public class GetLocalizations extends HttpServlet
 		JsonResult<Localization> json;
 		paramParser = new QueryStringParser(request);
 		int id = paramParser.GetValueOrDefault("tag", -1);
+		
+		/*
 		int limit = paramParser.GetValueOrDefault("entries", 0);
 		int minutes = paramParser.GetValueOrDefault("minutes", 0);
 		
@@ -60,7 +61,7 @@ public class GetLocalizations extends HttpServlet
 		{
 			e.printStackTrace();
 		}
-		
+		*/
 		String localizationArr = null; 
 		paramParser = new QueryStringParser(request);
 		long startTime = (long)paramParser.GetLongValueOrDefault("startTime", 0);
@@ -97,7 +98,7 @@ public class GetLocalizations extends HttpServlet
 			print.println(gson.toJson(json));
 		}
 		
-		
+		/*
 		if(result != null)
 		{
 			json = new JsonResult<Localization>(result.size() + " : Entries", result);
@@ -108,6 +109,7 @@ public class GetLocalizations extends HttpServlet
 			json = new JsonResult<Localization>("Error : DB Connection Failed", null);
 			print.println(gson.toJson(json));
 		}
+		*/
 	}
 
 }
