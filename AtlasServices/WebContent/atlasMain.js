@@ -97,5 +97,37 @@ function showData(startTime, endTime){
         var chart = new google.visualization.LineChart(document.getElementById('Monitor'));
         chart.draw(data, options);
       }
+
+    var map_rows = [];
+	var j=0;
+	for (var i = startTime; i < endTime+1; i=i+DELIMITER) {
+		var date = (new Date(i)).toLocaleString();;
+		map_rows.push([date, NumOfDetections[j]]);
+		j++;
+	}
+
+
+    google.charts.load('current', { 'packages': ['map'] });
+    google.charts.setOnLoadCallback(drawMap);
+
+    function drawMap() {
+      var data = google.visualization.arrayToDataTable();
+		data.addColumn('string', 'dateTime');
+      	data.addColumn('string', 'latitude');
+      	data.addColumn('string', 'longtitude')
+		data.addRows(rows);
+
+    var options = { 
+		'width':700,
+		'height':400,
+		chartArea: { width: 380 },
+    	showTip: true };
+
+    var map = new google.visualization.Map(document.getElementById('chart_div'));
+
+    map.draw(data, options);
+  };
 	  
 }
+
+
