@@ -183,16 +183,16 @@ public class LocalizationsReader extends DBConnection {
 			if (startTime >= 0 && startTime <= System.currentTimeMillis() && endTime >= 0 && endTime <= System.currentTimeMillis())
 			{
 				ArrayList<Localization> localizationsbytime;
-
-				arrString+= "["+ this.getLocalizationsByTime(LIMIT, startTime).size();
+				int i = 0;
+				arrString+= "[";
 				for (long t = startTime+TIME_DELIMITER; t<=endTime; t+=TIME_DELIMITER){
 					localizationsbytime = this.getLocalizationsByTime(LIMIT, t);
-					arrString+= ","+ localizationsbytime.size() ;
+					arrString = "[" + localizationsbytime.get(i).dateTime + "," + localizationsbytime.get(i).latitude + "," +localizationsbytime.get(i).longtitude + "]";
+					i++;
 				}
 				arrString += "]";
 			}
 		}
-		
 		finally {
 			try {
 				if (connection.isConnected())
