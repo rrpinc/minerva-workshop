@@ -12,10 +12,10 @@ import java.util.Calendar;
 import atlasTools.IsraelCoordinatesTransformations;
 
 public class LocalizationsReader extends DBConnection {
-	
+	private static final long TIME_DELIMITER = 1000;
 	private static final double TO_MINUTS = 0;
 	private DBConnection connection;
-	
+    private static final int LIMIT = 1000;
 	public ArrayList<Localization> getLocalizations(int count, long tag) throws SQLException
 	{
 		if (count < 1)
@@ -172,4 +172,38 @@ public class LocalizationsReader extends DBConnection {
 		
 		return result;
 	}
+	
+	public String getLocalizationsByTime(int count, long startTime, long endTime) throws Exception {
+		if (count < 1)
+			return null;
+		String arrString = "";
+
+		try {
+			
+			if (startTime >= 0 && startTime <= System.currentTimeMillis() && endTime >= 0 && endTime <= System.currentTimeMillis())
+			{
+				ArrayList<Localization> localizationsbytime;
+
+				arrString+= "["+ this.getLocalizationsByTime(LIMIT, startTime).size();
+				for (long t = startTime+TIME_DELIMITER; t<=endTime; t+=TIME_DELIMITER){
+					localizationsbytime = this.getLocalizationsByTime(LIMIT, t);
+					arrString+= ","+ localizationsbytime.size() ;
+				}
+				arrString += "]";
+			}
+		}
+		
+		finally {
+			try {
+				if (connection.isConnected())
+					connection.mConn.close();				
+				return arrString;
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return arrString;
+
+	}
+
 }

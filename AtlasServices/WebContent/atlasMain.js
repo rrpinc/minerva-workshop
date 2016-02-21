@@ -25,6 +25,22 @@ function logout(){
 	loggedin=false;
 	window.location = "login.html"; 
 }
+
+function ajaxGetCoors(time) {
+    var retData = null;
+    $.ajax({
+        async: false,
+        type: 'GET',
+        data: time,
+        url: "http://localhost:8080/AtlasServices/GetLocalizations",
+        success: function(data) {
+            retData = data;
+        }
+    });
+    return retData;
+}
+
+
 function ajaxGetDetections(time) {
     var retData = null;
     $.ajax({
@@ -98,11 +114,13 @@ function showData(startTime, endTime){
         chart.draw(data, options);
       }
 
+    var res = window.ajaxGetCoors(time);    
+	var NumOfLocalizations = res["LocalizationsArr"];	
+    
     var map_rows = [];
 	var j=0;
 	for (var i = startTime; i < endTime+1; i=i+DELIMITER) {
-		var date = (new Date(i)).toLocaleString();;
-		map_rows.push([date, NumOfDetections[j]]);
+		map_rows.push([Localizations[j][0],[Localizations[j][1], [Localizations[j][2] ]);
 		j++;
 	}
 
@@ -115,15 +133,16 @@ function showData(startTime, endTime){
 		data.addColumn('string', 'dateTime');
       	data.addColumn('string', 'latitude');
       	data.addColumn('string', 'longtitude')
-		data.addRows(rows);
+		data.addRows(map_rows);
 
     var options = { 
-		'width':700,
+		zoomLevel :8,
+    	'width':700,
 		'height':400,
 		chartArea: { width: 380 },
     	showTip: true };
 
-    var map = new google.visualization.Map(document.getElementById('chart_div'));
+    var map = new google.visualization.Map(document.getElementById('map'));
 
     map.draw(data, options);
   };
