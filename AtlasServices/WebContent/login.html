@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html >
   <head>
@@ -5,7 +7,26 @@
     <title>Login</title>
     <link rel="stylesheet" href="css/style.css">
 	<script src="jquery-1.11.2.min.js"></script>
+	<script type='text/javascript'>
+	localStorage.setItem('loggedin', false);
+	var randkey = '1234567890987654';
+	</script>
 	<script src="login.js"></script>
+	<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script>
+	<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/pbkdf2.js"></script>
+	<script type="text/javascript">
+    function convertAndSubmit()
+    {
+        var salt = CryptoJS.lib.WordArray.random(128/8);
+        var iv = CryptoJS.lib.WordArray.random(128/8);           
+        console.log('salt  '+ salt );
+        console.log('iv  '+ iv );
+        var key128Bits100Iterations = CryptoJS.PBKDF2('1234567890987654', salt, { keySize: 128/32, iterations: 100 });
+        console.log( 'key128Bits100Iterations '+ key128Bits100Iterations);
+        var encrypted = CryptoJS.AES.encrypt($("#pwd").val(), key128Bits100Iterations, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7  }).toString();
+        checkLogin(encrypted, randkey, salt.toString(), iv.toString());
+    }
+	</script>
   </head>
 
   <body>
@@ -16,14 +37,18 @@
 
     <fieldset>
 
-      <form action="javascript:void(0);" method="get">
+      <form action="javascript:void(0);" method="get" name="login">
 
         <input type="email" id="email" name="email" required value="Email" onBlur="if(this.value=='')this.value='Email'" onFocus="if(this.value=='Email')this.value='' "> <!-- JS because of IE support; better: placeholder="Email" -->
 
         <input type="password" id="pwd" name="pwd" required value="Password" onBlur="if(this.value=='')this.value='Password'" onFocus="if(this.value=='Password')this.value='' "> <!-- JS because of IE support; better: placeholder="Password" -->
 
+        <!-- 
         <input type="submit" value="Login" id="login">
-
+        also delete $('#login').on('click',checkLogin); from js
+        -->
+        <input type="submit" value="Login" id="login" onclick="javascript:convertAndSubmit()">
+        
       </form>
 
     </fieldset>

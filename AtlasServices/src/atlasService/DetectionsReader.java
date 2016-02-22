@@ -127,11 +127,7 @@ public class DetectionsReader {
 		if (count < 1)
 			return null;
 		String arrString = "";
-		/*
-		if (!connection.isConnected()) {
-			return null;
-		}
-		*/
+
 		try {
 			
 			if (startTime >= 0 && startTime <= System.currentTimeMillis() && endTime >= 0 && endTime <= System.currentTimeMillis())
