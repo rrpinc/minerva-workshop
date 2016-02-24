@@ -197,11 +197,11 @@ public class LocalizationsReader extends DBConnection {
 				
 				arrString+= "[";
 				int i = 0;
-				localizationsbytime = this.getLocalizationsByTime(startTime-500, startTime+500, avaliableTags.get(0));
+				localizationsbytime = this.getLocalizationsByTimeDelta(startTime-500, startTime+500, avaliableTags.get(0).id);
 				arrString+= "["+ localizationsbytime.get(i).dateTime + "," + localizationsbytime.get(i).latitude + "," +localizationsbytime.get(i).longtitude + "]";
 				i++;
 				for (long t = startTime+TIME_DELIMITER; t<=endTime; t+=TIME_DELIMITER){
-					localizationsbytime = this.getLocalizationsByTime(t-500, t+500, avaliableTags.get(0));
+					localizationsbytime = this.getLocalizationsByTimeDelta(t-500, t+500, avaliableTags.get(0).id);
 					arrString = ", [" + localizationsbytime.get(i).dateTime + "," + localizationsbytime.get(i).latitude + "," +localizationsbytime.get(i).longtitude + "]";
 					i++;
 				}
@@ -211,11 +211,11 @@ public class LocalizationsReader extends DBConnection {
 					i = 0;
 					arrString+= ", [";
 
-					localizationsbytime = this.getLocalizationsByTime(startTime-500, startTime+500, avaliableTags.get(j));
+					localizationsbytime = this.getLocalizationsByTimeDelta(startTime-500, startTime+500, avaliableTags.get(j).id);
 					arrString+= "["+ localizationsbytime.get(i).dateTime + "," + localizationsbytime.get(i).latitude + "," +localizationsbytime.get(i).longtitude + "]";
 					i++;
 					for (long t = startTime+TIME_DELIMITER; t<=endTime; t+=TIME_DELIMITER){
-						localizationsbytime = this.getLocalizationsByTime(t-500, t+500, avaliableTags.get(j));
+						localizationsbytime = this.getLocalizationsByTimeDelta(t-500, t+500, avaliableTags.get(j).id);
 						arrString = ", [" + localizationsbytime.get(i).dateTime + "," + localizationsbytime.get(i).latitude + "," +localizationsbytime.get(i).longtitude + "]";
 						i++;
 					}

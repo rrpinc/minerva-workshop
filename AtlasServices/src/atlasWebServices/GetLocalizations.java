@@ -17,6 +17,7 @@ import com.google.gson.JsonObject;
 
 import atlasService.Localization;
 import atlasService.LocalizationsReader;
+import atlasService.Tag;
 
 public class GetLocalizations extends HttpServlet
 {
@@ -86,7 +87,7 @@ public class GetLocalizations extends HttpServlet
 			
 			JsonObject responseJson = new JsonObject();
 			responseJson.addProperty("localizationArr", localizationArr);
-			responseJson.addProperty("tags", localizationsReader.getAvailableTags());
+			responseJson.addProperty("tags", ArrToString(localizationsReader.getAvailableTags()));
 		    response.setContentType("application/json");
 		    response.setCharacterEncoding("UTF-8");
 		    String jsonn = new Gson().toJson(responseJson);
@@ -111,6 +112,19 @@ public class GetLocalizations extends HttpServlet
 			print.println(gson.toJson(json));
 		}
 		*/
+	}
+
+	private String ArrToString(ArrayList<Tag> availableTags) {
+		String arr="";
+		arr+="[";
+		arr+=availableTags.get(0).id;
+		
+		for (int i=0; i<availableTags.size(); i++){
+			arr+= ","+availableTags.get(i).id;
+		}
+		arr+="]";
+
+		return arr;
 	}
 
 }
