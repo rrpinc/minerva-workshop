@@ -12,6 +12,7 @@
 	<script type='text/javascript'>
 	var startTime;
 	var endTime;
+	var map;
 	</script>
 	<script src="atlasMain.js"></script>
     <script src="atlas.min.js"></script>
@@ -19,7 +20,9 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
+
       google.charts.load('current', {'packages':['corechart', 'map']});
 
     </script>
@@ -42,6 +45,46 @@
 			document.getElementById('refreshButton').disabled=false;
 		}
 		</script>
+		<script>
+// In the following example, markers appear when the user clicks on the map.
+// Each marker is labeled with a single alphabetical character.
+
+		localStorage.setItem('toShow', "false");
+		localStorage.setItem('map_init', "no");
+
+
+
+function initialize(newMark, color, time) {
+	  
+  if (localStorage.getItem('map_init') == "no"){
+	  initMap();
+  }
+
+  // Add a marker at the center of the map.
+  addMarker(newMark, map, color, time);
+}
+
+// Adds a marker to the map.
+function addMarker(location, map, color, time) {
+  // Add the marker at the clicked location, and add the next-available label
+  // from the array of alphabetical characters.
+  var pinImage = new google.maps.MarkerImage("http://www.googlemapsmarkers.com/v1/"+color +"/");
+  
+  var infowindow = new google.maps.InfoWindow({
+	    content: '<center>'+(new Date(time)).toLocaleString()+'</center>'
+	  });
+  var marker = new google.maps.Marker({
+    position: location,
+    map: map,
+    icon: pinImage
+  });
+  marker.addListener('click', function() {
+	    infowindow.open(map, marker);
+	  });
+}
+
+    </script>
+    
   </head>
   <body>
     <div id="sidedrawer" class="atlas--no-user-select">
@@ -70,14 +113,15 @@
           <a class="sidedrawer-toggle atlas--hidden-xs atlas--hidden-sm js-hide-sidedrawer">☰</a>
 		  <!-- Centered Pills -->
 <ul class="nav nav-tabs nav-justified" id="MyTabs">
-  <li  class="active"><a data-toggle="tab" href="#Map" id="#MapTab"><b>Map</b></a></li>
-  <li><a data-toggle="tab" href="#Monitor" id="#MonitorTab" ><b>Monitor</b></a></li>
+  <li><a data-toggle="tab" href="#Map" id="#MapTab"><b>Map</b></a></li>
+  <li class="active"><a data-toggle="tab" href="#Monitor" id="#MonitorTab" ><b>Monitor</b></a></li>
 </ul>
         </div>
       </div>
 		  			
 	<div class="tab-content">
         <div class="tab-pane fade" id="Map">
+                
         
         
           <style>
@@ -87,23 +131,21 @@
             padding: 0;
           }
           #google_map {
-            margin: 0;
+            margin: 0 auto;
             padding: 0;
-            width: 1400px;
-            height: 600px;
+            width: 670px;
+            height: 400px;
           }
           </style>
-          <body>
-            <script type="text/javascript"
-              src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsyC68nnMUD5YNiLPdz_cEk-VdKaiTnWA&libraries=geometry,places">
-            </script>
+
             <body>
 
             <div id="google_map"></div>
 
             </body>
-
-          </body>
+            <script type="text/javascript"
+              src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsyC68nnMUD5YNiLPdz_cEk-VdKaiTnWA&libraries=geometry,places&callback=initMap">
+            </script>
         </div>
         
         

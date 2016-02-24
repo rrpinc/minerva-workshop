@@ -4,9 +4,14 @@ $(document).ready(function() {
 	if (localStorage.getItem('loggedin')) {
 		$("#refreshButton").on("click", refreshData);
 		$("#logout").click(logout);
+		
+		localStorage.setItem('toShow', "false");
 
 		$('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
 			localStorage.setItem('activeTab', $(e.target).attr('href'));
+			if (localStorage.getItem('toShow') == "true"){
+				showData(startTime, endTime);
+			}
 		});
 		document.getElementById('refreshButton').disabled=true;
 		var activeTab = localStorage.getItem('activeTab');
@@ -58,6 +63,8 @@ function parseYMDHM(s) {
 }
 function refreshData(){
 					   
+	localStorage.setItem('toShow', "true");
+
 	var method = $('input[name=method]:checked').val();
 	
 	if (method === "interval"){
@@ -91,43 +98,43 @@ function showData(startTime, endTime){
 	    showMap(startTime, endTime, time, DELIMITER);
 	}  
 }
+function initMap() {
+
+	 if (localStorage.getItem('activeTab') == "#Map" && localStorage.getItem('toShow') == "true"){
+		map = new google.maps.Map(document.getElementById('google_map'), {
+		      center: {lat: 33.120675660801325, lng: 35.59343085169261},
+		      zoom: 8
+		   });	 
+		localStorage.setItem('map_init', "yes");
+
+	 }   
+
+  }
+function componentToHex(c) {
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}
+
+function rgbToHex(r, g, b) {
+    return "" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
 
 function showMap(startTime, endTime, time, DELIMITER){
 	res = window.ajaxGetCoors(time);    
 	var Localizations = res["localizationsArr"];
-    //var Localizations = [[0,'33.120675660801325','35.59343085169261'],[1,'33.10145464530716','35.62557091961993']];
+    //var Localizations = [[0,33.120675660801325,35.59343085169261],[1,33.10145464530716,35.62557091961993]];
+    //for testing a minute multiply by 60//
     
-    var map_rows = [];
-	var j=0;
-	for (var i = startTime; i < endTime+1; i=i+60*DELIMITER) {
-		var date = (new Date(i)).toLocaleString();
-		map_rows.push([date,Localizations[j][1], Localizations[j][2]]);
-		j++;
-	}
+	var len = (endTime - startTime)/(DELIMITER);
 
-    google.charts.setOnLoadCallback(drawMap);
-
-    function drawMap() {
-	    var data = new google.visualization.DataTable();
-		data.addColumn('string', 'dateTime');
-	  	data.addColumn('string', 'latitude');
-	  	data.addColumn('string', 'longtitude')
-		data.addRows(map_rows);
-	
-	    options = { 
-			zoomLevel :8,
-	    	'width':700,
-			'height':400,
-			chartArea: { width: 380 },
-	    	showTip: true };
-	
-	    var map = new google.visualization.Map(document.getElementById('Map'), {
-	        center: {lat: -34.397, lng: 150.644},
-	        zoom: 8
-	      });
-	      
-	    map.draw(data, options);
+    var j=0;
+	for (var i = startTime; i < endTime+1; i=i+DELIMITER) {
+        var newMark = {lat: Localizations[j][1], lng: Localizations[j][2]};
+        var color = rgbToHex(70-(j*70/len),80+(j*70/len),70-(j*70/len));
+        initialize(newMark, color, i);
+        j++;
     }
+
 }
 
 function showChart(startTime, endTime, time, DELIMITER){
