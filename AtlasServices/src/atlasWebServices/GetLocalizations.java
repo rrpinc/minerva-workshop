@@ -86,6 +86,7 @@ public class GetLocalizations extends HttpServlet
 			
 			JsonObject responseJson = new JsonObject();
 			responseJson.addProperty("localizationArr", localizationArr);
+			responseJson.addProperty("tags", localizationsReader.getAvailableTags());
 		    response.setContentType("application/json");
 		    response.setCharacterEncoding("UTF-8");
 		    String jsonn = new Gson().toJson(responseJson);

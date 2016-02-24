@@ -54,24 +54,25 @@
 
 
 
-function initialize(newMark, color, time) {
+function initialize(newMark, color, time, tag) {
 	  
   if (localStorage.getItem('map_init') == "no"){
 	  initMap();
   }
 
   // Add a marker at the center of the map.
-  addMarker(newMark, map, color, time);
+  addMarker(newMark, map, color, time, tag);
 }
 
 // Adds a marker to the map.
-function addMarker(location, map, color, time) {
+function addMarker(location, map, color, time, tag) {
   // Add the marker at the clicked location, and add the next-available label
   // from the array of alphabetical characters.
-  var pinImage = new google.maps.MarkerImage("http://www.googlemapsmarkers.com/v1/"+color +"/");
+  var pinImage = new google.maps.MarkerImage("http://www.googlemapsmarkers.com/v1/"+color +"/");  
+  var display = '<center>'+'Tag: '+ tag + '<br>Date:'+(new Date(time)).toLocaleString()+'</center>';
   
   var infowindow = new google.maps.InfoWindow({
-	    content: '<center>'+(new Date(time)).toLocaleString()+'</center>'
+	    content: display
 	  });
   var marker = new google.maps.Marker({
     position: location,

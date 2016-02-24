@@ -16,6 +16,17 @@ public class LocalizationsReader extends DBConnection {
 	private static final double TO_MINUTS = 0;
 	private DBConnection connection;
     private static final int LIMIT = 1000;
+    private AvailableTagsReader avTagsReader;
+	private ArrayList<Tag> avaliableTags;
+
+	public LocalizationsReader(){
+	    avTagsReader = new AvailableTagsReader();
+	    avaliableTags = avTagsReader.getAvailableTags();
+	}
+	
+	public ArrayList<Tag> getAvailableTags(){
+		return avaliableTags;
+	}
 	public ArrayList<Localization> getLocalizations(int count, long tag) throws SQLException
 	{
 		if (count < 1)
@@ -183,13 +194,34 @@ public class LocalizationsReader extends DBConnection {
 			if (startTime >= 0 && startTime <= System.currentTimeMillis() && endTime >= 0 && endTime <= System.currentTimeMillis())
 			{
 				ArrayList<Localization> localizationsbytime;
-				int i = 0;
+				
 				arrString+= "[";
+				int i = 0;
+				localizationsbytime = this.getLocalizationsByTime(startTime-500, startTime+500, avaliableTags.get(0));
+				arrString+= "["+ localizationsbytime.get(i).dateTime + "," + localizationsbytime.get(i).latitude + "," +localizationsbytime.get(i).longtitude + "]";
+				i++;
 				for (long t = startTime+TIME_DELIMITER; t<=endTime; t+=TIME_DELIMITER){
-					localizationsbytime = this.getLocalizationsByTime(LIMIT, t);
-					arrString = "[" + localizationsbytime.get(i).dateTime + "," + localizationsbytime.get(i).latitude + "," +localizationsbytime.get(i).longtitude + "]";
+					localizationsbytime = this.getLocalizationsByTime(t-500, t+500, avaliableTags.get(0));
+					arrString = ", [" + localizationsbytime.get(i).dateTime + "," + localizationsbytime.get(i).latitude + "," +localizationsbytime.get(i).longtitude + "]";
 					i++;
 				}
+				arrString += "]";
+				
+				for (int j = 1; j<avaliableTags.size(); j++){
+					i = 0;
+					arrString+= ", [";
+
+					localizationsbytime = this.getLocalizationsByTime(startTime-500, startTime+500, avaliableTags.get(j));
+					arrString+= "["+ localizationsbytime.get(i).dateTime + "," + localizationsbytime.get(i).latitude + "," +localizationsbytime.get(i).longtitude + "]";
+					i++;
+					for (long t = startTime+TIME_DELIMITER; t<=endTime; t+=TIME_DELIMITER){
+						localizationsbytime = this.getLocalizationsByTime(t-500, t+500, avaliableTags.get(j));
+						arrString = ", [" + localizationsbytime.get(i).dateTime + "," + localizationsbytime.get(i).latitude + "," +localizationsbytime.get(i).longtitude + "]";
+						i++;
+					}
+					arrString += "]";
+				}
+				
 				arrString += "]";
 			}
 		}
