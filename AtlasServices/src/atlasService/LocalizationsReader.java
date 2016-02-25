@@ -8,24 +8,35 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import atlasTools.IsraelCoordinatesTransformations;
 
 public class LocalizationsReader extends DBConnection {
 	private static final long TIME_DELIMITER = 1000;
-	private static final double TO_MINUTS = 0;
 	private DBConnection connection;
-    private static final int LIMIT = 1000;
-    private AvailableTagsReader avTagsReader;
-	private ArrayList<Tag> avaliableTags;
+	private List<Long> avaliableTags;
 
 	public LocalizationsReader(){
-	    avTagsReader = new AvailableTagsReader();
-	    avaliableTags = avTagsReader.getAvailableTags();
 	}
 	
-	public ArrayList<Tag> getAvailableTags(){
-		return avaliableTags;
+	public String getAvailableTagsString(){
+		String arr="";
+		try
+		{
+			arr+="[";
+			for (int i=0; i<avaliableTags.size(); i++){
+				arr+= (i==0? avaliableTags.get(i) : ","+ avaliableTags.get(i));
+			}
+			arr+="]";
+		}
+		catch (Exception e)
+		{
+			return "";
+		}
+		return arr;
 	}
 	public ArrayList<Localization> getLocalizations(int count, long tag) throws SQLException
 	{
@@ -188,37 +199,38 @@ public class LocalizationsReader extends DBConnection {
 		if (count < 1)
 			return null;
 		String arrString = "";
+		ArrayList<Localization> localizationsbytime;
+		int i=0;
 
 		try {
 			
 			if (startTime >= 0 && startTime <= System.currentTimeMillis() && endTime >= 0 && endTime <= System.currentTimeMillis())
 			{
-				ArrayList<Localization> localizationsbytime;
+				localizationsbytime = this.getLocalizationsByTimeDelta(startTime-500, startTime+500, -1);
+				Map<Long, List<Localization>> localizationsByTags = new HashMap<Long, List<Localization>>();
+				List<Localization> l;
+
+				for (int j = 0; j<localizationsbytime.size(); j++){
+					l = localizationsByTags.get(localizationsbytime.get(j).tag);
+	                if (l == null){
+						avaliableTags.add(localizationsbytime.get(j).tag);
+	                	localizationsByTags.put(localizationsbytime.get(j).tag, l=new ArrayList<Localization>());
+	                }
+	                l.add(localizationsbytime.get(j));
+				}
 				
 				arrString+= "[";
-				int i = 0;
-				localizationsbytime = this.getLocalizationsByTimeDelta(startTime-500, startTime+500, avaliableTags.get(0).id);
-				arrString+= "["+ localizationsbytime.get(i).dateTime + "," + localizationsbytime.get(i).latitude + "," +localizationsbytime.get(i).longtitude + "]";
-				i++;
-				for (long t = startTime+TIME_DELIMITER; t<=endTime; t+=TIME_DELIMITER){
-					localizationsbytime = this.getLocalizationsByTimeDelta(t-500, t+500, avaliableTags.get(0).id);
-					arrString = ", [" + localizationsbytime.get(i).dateTime + "," + localizationsbytime.get(i).latitude + "," +localizationsbytime.get(i).longtitude + "]";
-					i++;
-				}
-				arrString += "]";
-				
-				for (int j = 1; j<avaliableTags.size(); j++){
-					i = 0;
-					arrString+= ", [";
 
-					localizationsbytime = this.getLocalizationsByTimeDelta(startTime-500, startTime+500, avaliableTags.get(j).id);
-					arrString+= "["+ localizationsbytime.get(i).dateTime + "," + localizationsbytime.get(i).latitude + "," +localizationsbytime.get(i).longtitude + "]";
-					i++;
-					for (long t = startTime+TIME_DELIMITER; t<=endTime; t+=TIME_DELIMITER){
-						localizationsbytime = this.getLocalizationsByTimeDelta(t-500, t+500, avaliableTags.get(j).id);
-						arrString = ", [" + localizationsbytime.get(i).dateTime + "," + localizationsbytime.get(i).latitude + "," +localizationsbytime.get(i).longtitude + "]";
+				for (int j = 0; j<localizationsByTags.size(); j++){
+					arrString+= (j==0? "[": ",[");
+					i=0;
+					for (long t = startTime; t<=endTime; t+=TIME_DELIMITER){
+						arrString += (i==0? "[": ",[");
+						arrString += localizationsbytime.get(i).dateTime + "," + localizationsbytime.get(i).latitude + "," +localizationsbytime.get(i).longtitude;
+						arrString += "]";
 						i++;
 					}
+					
 					arrString += "]";
 				}
 				

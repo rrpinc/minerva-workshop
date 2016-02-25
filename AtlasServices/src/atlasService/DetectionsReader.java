@@ -34,9 +34,9 @@ public class DetectionsReader {
 			ResultSet rs = st.executeQuery(query);
 			ArrayList<Detections> ret = new ArrayList<Detections>();
 			while (rs.next()) {
-				Detections tmp = new Detections(rs.getLong("TIME_GROUP"),
+				Detections tmp = new Detections(
 						rs.getInt("BS"), rs.getLong("TAG"), rs.getLong("TX"),
-						rs.getDouble("TIME"), rs.getDouble("SAMPLES_CLK"),
+						rs.getLong("TIME"), rs.getDouble("SAMPLES_CLK"),
 						rs.getFloat("SNR"), rs.getFloat("RSSI"),
 						rs.getFloat("HEADROOM"), rs.getFloat("GAIN"));
 				ret.add(tmp);
@@ -68,9 +68,6 @@ public class DetectionsReader {
 			String query = "SELECT * FROM DETECTIONS ORDER BY TIME DESC LIMIT "
 					+ count;
 
-			/*
-			 * TIME>=time-500 AND TIME <time+500
-			 */
 			if (time >= 0 && time <= System.currentTimeMillis())
 				query = "SELECT * FROM DETECTIONS WHERE TIME>="+ (time-500) +" AND TIME <"+(time+500)
 				+ " LIMIT " + count;
@@ -78,9 +75,9 @@ public class DetectionsReader {
 			ResultSet rs = st.executeQuery(query);
 			ArrayList<Detections> ret = new ArrayList<Detections>();
 			while (rs.next()) {
-				Detections tmp = new Detections(rs.getLong("TIME_GROUP"),
+				Detections tmp = new Detections(
 						rs.getInt("BS"), rs.getLong("TAG"), rs.getLong("TX"),
-						rs.getDouble("TIME"), rs.getDouble("SAMPLES_CLK"),
+						rs.getLong("TIME"), rs.getDouble("SAMPLES_CLK"),
 						rs.getFloat("SNR"), rs.getFloat("RSSI"),
 						rs.getFloat("HEADROOM"), rs.getFloat("GAIN"));
 				ret.add(tmp);
@@ -99,29 +96,6 @@ public class DetectionsReader {
 				e.printStackTrace();
 			}
 		}
-		/*
-		ArrayList<Detections> ret = new ArrayList<Detections>();
-		
-		Detections tmp = new Detections(10000,
-					133, 329898, 928365,
-					2525.4353, 234235.2352,
-					4, 5,
-					2, 5);
-			ret.add(tmp);
-			tmp = new Detections(1000,
-					133, 329898, 928365,
-					25.4353, 2345.2352,
-					4, 5,
-					2, 5);
-			ret.add(tmp);
-			tmp = new Detections(10000,
-					133, 32898, 928365,
-					255.433, 234235.2352,
-					4, 1,
-					2, 5);
-			ret.add(tmp);
-		
-		return ret;*/
 	}
 	public String getDETECTIONSbyTime(int count, long startTime, long endTime) {
 		if (count < 1)
@@ -134,7 +108,6 @@ public class DetectionsReader {
 			{
 				ArrayList<Detections> detectionsbytime;
 
-//				int numOfItems = (int) ((endTime- startTime)/TIME_DELIMITER);
 				arrString+= "["+ this.getDETECTIONSbyTime(LIMIT, startTime).size();
 				for (long t = startTime+TIME_DELIMITER; t<=endTime; t+=TIME_DELIMITER){
 					detectionsbytime = this.getDETECTIONSbyTime(LIMIT, t);
