@@ -64,7 +64,7 @@ function parseYMDHM(s) {
 function refreshData(){
 					   
 	localStorage.setItem('toShow', "true");
-
+	clearInterval(refreshIntervalId);
 	var method = $('input[name=method]:checked').val();
 	
 	if (method === "interval"){
@@ -75,7 +75,7 @@ function refreshData(){
 		showData(startTime, endTime);
 	}
 	else {
-		setInterval(function(){
+		refreshIntervalId = setInterval(function(){
 			var today = new Date();
 			startTime = today.getTime() - ($("#minutes").val())*60000;
 			endTime = today.getTime();
@@ -135,9 +135,6 @@ function showMap(startTime, endTime, time, DELIMITER){
 		Localizations = $.parseJSON(res["localizationsArr"]);		
 		Tags = $.parseJSON(res["tags"]);
 	}
-	//var Tags = [1,2,3];
-    //var Localizations = [[0,33.120675660801325,35.59343085169261],[1,33.10145464530716,35.62557091961993]];
-    //for testing a minute multiply by 60//
     
 	var len = (endTime - startTime)/(DELIMITER);
 
@@ -160,6 +157,11 @@ function showMap(startTime, endTime, time, DELIMITER){
 		        j++;
 		    }
 		}
+	}
+	else {
+		var newMark = {lat: 33.080527, lng: 35.597305};
+		color = rgbToHex(70,80,70);
+		initialize(newMark, color, startTime, "0");
 	}
 }
 

@@ -38,7 +38,6 @@ public class GetDetections extends HttpServlet {
     protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-    	//response.setContentType("application/json");
 		PrintWriter print = response.getWriter();		
 		Gson gson = new GsonBuilder().setPrettyPrinting()
 				.setDateFormat(DateFormat.FULL, DateFormat.FULL).create();
@@ -69,7 +68,6 @@ public class GetDetections extends HttpServlet {
 		    String jsonn = new Gson().toJson(responseJson);
 		    print.write(jsonn);
 		    
-//			print.println(gson.toJson(json));
 		}
 		else
 		{

@@ -39,7 +39,6 @@ public class Login extends HttpServlet {
 	
     protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-//    	request.getRequestDispatcher("/WebContent/WEB-INF/login/Login.jsp").forward(request, response);
 	    	
     	paramParser = new QueryStringParser(request);
     	String email = (String) paramParser.GetValueOrNull("email");
@@ -48,23 +47,12 @@ public class Login extends HttpServlet {
     	String key = (String) paramParser.GetValueOrNull("key");
     	String salt = (String) paramParser.GetValueOrNull("salt");
     	String iv = (String) paramParser.GetValueOrNull("iv");
-    	/*
-    	String password = (String) paramParser.GetValueOrNull("pass");
-    	*/
-    	
-//    	String jsonString = IOUtils.toString(request.getInputStream(), "UTF-8");
-//		JsonParser parser = new JsonParser();
-//		JsonObject requestJson = (JsonObject)parser.parse(jsonString);
-//		String email = (String) requestJson.get("email").getAsString();
-//		String password = (String) requestJson.get("pass").getAsString();
-    	
-    	
-    	 String password = null;
+    		
+    	String password = null;
     	 
 		try {
 			password = decryptAESEncryptWithSaltAndIV(encrypted, key, salt, iv);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

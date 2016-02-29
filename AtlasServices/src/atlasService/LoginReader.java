@@ -1,10 +1,9 @@
 package atlasService;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Calendar;
+import java.io.File;
+import java.util.Scanner;
+
+import com.sun.org.apache.bcel.internal.util.ClassLoader;
 
 public class LoginReader {
 	
@@ -19,18 +18,24 @@ public class LoginReader {
 	public Boolean loginToWebsite(String email, String password) {
 		
 		try {
-			String query = "SELECT * FROM credentials WHERE email='"+email+"'";
-			Statement st = connection.mConn.createStatement();
-			ResultSet rs = st.executeQuery(query);
-				
-			if (rs.next()) {
-				if (rs.getString("password").equals(password)) {
-					st.close();
-					return true;
-				}
-			}
-			st.close();
+			String f = (new File("users.csv")).getAbsolutePath();
+			
+			Scanner scanner = new Scanner(new File(f));
+	        String tmp_email;
+	        scanner.useDelimiter(",");
+
+	        while (scanner.hasNext()) 
+	        {
+	        	tmp_email = scanner.next();
+	        	tmp_email = tmp_email.replaceAll("\\s+","");
+	            if (tmp_email.equals(email)){
+	        		return scanner.next().equals(password) ? true : false;
+	        	}
+	        }
+	         
+	        scanner.close();
 			return false;
+			
 		} catch (Exception e){
 			System.err.print("Exception: ");
 			System.err.println(e.getMessage());
