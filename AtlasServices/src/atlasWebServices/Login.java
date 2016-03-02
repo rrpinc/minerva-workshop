@@ -1,9 +1,12 @@
 package atlasWebServices;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.security.spec.KeySpec;
 import java.util.Random;
+import java.util.Scanner;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -24,7 +27,7 @@ import sun.misc.BASE64Decoder;
 
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    private LoginReader loginReader = new LoginReader();
+//    private LoginReader loginReader = new LoginReader();
 
 	public static final int HTTP_STATUS_OK = 200;
 	public static final int HTTP_STATUS_CREATED = 201;
@@ -62,7 +65,7 @@ public class Login extends HttpServlet {
 		}
 		
 		
-		boolean logged = loginReader.loginToWebsite(email, password);
+		boolean logged = loginToWebsite(email, password);
 		
 		
 		if (logged) {
@@ -141,6 +144,33 @@ public class Login extends HttpServlet {
 
         return decryptedValue;
     }
-
-
+    
+	public Boolean loginToWebsite(String email, String password) {
+			
+			try {
+				
+				InputStream users_file = this.getClass().getClassLoader().getResourceAsStream("/users.csv");		
+				Scanner scanner = new Scanner(users_file);
+						
+		        String tmp_email;
+		        scanner.useDelimiter(",");
+	
+		        while (scanner.hasNext()) 
+		        {
+		        	tmp_email = scanner.next();
+		        	tmp_email = tmp_email.replaceAll("\\s+","");
+		            if (tmp_email.equals(email)){
+		        		return scanner.next().equals(password) ? true : false;
+		        	}
+		        }
+		         
+		        scanner.close();
+				return false;
+				
+			} catch (Exception e){
+				System.err.print("Exception: ");
+				System.err.println(e.getMessage());
+				return false;
+			}
+	}
 }

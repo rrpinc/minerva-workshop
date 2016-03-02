@@ -6,14 +6,8 @@ import java.util.Scanner;
 import com.sun.org.apache.bcel.internal.util.ClassLoader;
 
 public class LoginReader {
-	
-	private UsersDBConnection connection;
-	
-	public LoginReader()
-	{
-		connection = new UsersDBConnection();
-		connection.Connect();
-	}
+		
+	public LoginReader(){}
 	
 	public Boolean loginToWebsite(String email, String password) {
 		
@@ -41,15 +35,6 @@ public class LoginReader {
 			System.err.println(e.getMessage());
 			return false;
 
-		} finally {
-			try {
-				connection.mConn.close();
-			}
-			catch (Exception e) {
-				System.err.print("Exception: ");
-				System.err.println(e.getMessage());
-
-			}		
 		}
 		
 	}
