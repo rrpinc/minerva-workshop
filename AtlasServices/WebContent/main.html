@@ -67,18 +67,6 @@ function initialize(newMark, color, time, tag) {
   addMarker(newMark, map, color, time, tag);
 }
 
-function addPolyline(planCoordinates, map, color, time, tag) {
-	
-    var flightPath = new google.maps.Polyline({
-      path: planCoordinates,
-      geodesic: true,
-      strokeColor: color,
-      strokeOpacity: 1.0,
-      strokeWeight: 2
-    });
-
-    flightPath.setMap(map);
-}
 // Adds a marker to the map.
 function addMarker(location, map, color, time, tag) {
   // Add the marker at the clicked location, and add the next-available label

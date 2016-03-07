@@ -167,21 +167,6 @@ function showMap(startTime, endTime, time, DELIMITER){
 		        initialize(newMark, color, local[0], Tags[tag]);
 		        j++;
 		    }
-			if (tag%5 == 0){
-				addPolyline(path, map, rgbToHex(219,58,58), time, Tags[tag]);
-	        }
-	        if (tag%5 == 1){
-				addPolyline(path, map, rgbToHex(96,58,219), time, Tags[tag]);
-	        }
-	        if (tag%5 == 2){
-				addPolyline(path, map, rgbToHex(35,193,53), time, Tags[tag]);
-	        }
-	        if (tag%5 == 3){
-				addPolyline(path, map, rgbToHex(185,61,199), time, Tags[tag]);
-	        }
-	        if (tag%5 == 4){
-				addPolyline(path, map, rgbToHex(255,171,42), time, Tags[tag]);
-	        }
 
 		}
 	}
