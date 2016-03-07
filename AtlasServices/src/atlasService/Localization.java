@@ -30,4 +30,18 @@ public class Localization {
 		this.longtitude = wGS84Y;
 		this.dateTime=dateTime;
 	}
+	
+	public Localization(long tag, long tx, String time, double x,
+			double y, double z, double wGS84X,double wGS84Y,Date dateTime) {
+		super();
+		this.tag = tag;
+		this.tx = tx;
+		this.time = time;
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.latitude = wGS84X;
+		this.longtitude = wGS84Y;
+		this.dateTime=dateTime;
+	}
 }

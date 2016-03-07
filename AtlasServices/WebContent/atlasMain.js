@@ -35,7 +35,7 @@ function ajaxGetCoors(time) {
         async: false,
         type: 'GET',
         data: time,
-        url: "http://localhost:8080/AtlasServices/GetLocalizations",
+        url: "GetLocalizations",
         success: function(data) {
             retData = data;
         }
@@ -50,7 +50,7 @@ function ajaxGetDetections(time) {
         async: false,
         type: 'GET',
         data: time,
-        url: "http://localhost:8080/AtlasServices/GetDetections",
+        url: "GetDetections",
         success: function(data) {
             retData = data;
         }
@@ -68,7 +68,8 @@ function refreshData(){
 	var method = $('input[name=method]:checked').val();
 	
 	if (method === "interval"){
-		var RAWstartTime = parseYMDHM($("#startTime").val());
+		var RAWstartTime = (parseYMDHM($("#startTime").val()))
+		RAWstanrtTime = RAWstartTime.toUTCString();
 		startTime = RAWstartTime.getTime();
 		var RAWendTime = parseYMDHM($("#endTime").val());
 		endTime = RAWendTime.getTime();
@@ -103,7 +104,7 @@ function initMap() {
 	 if (localStorage.getItem('activeTab') == "#Map" && localStorage.getItem('toShow') == "true"){
 		map = new google.maps.Map(document.getElementById('google_map'), {
 		      center: {lat: 33.120675660801325, lng: 35.59343085169261},
-		      zoom: 8
+		      zoom: 15
 		   });	 
 		localStorage.setItem('map_init', "yes");
 
@@ -125,14 +126,14 @@ function showMap(startTime, endTime, time, DELIMITER){
 	var Tags;
 	var valid = true;
 	
-	if (res["localizationsArr"] == "" || res["localizationsArr"] == undefined){
+	if (res["localizationArr"] == "" || res["localizationArr"] == undefined){
 		valid = false;
 	}
 	else if (res["tags"] == "" || res["tags"]== undefined){
 		valid = false;
 	}
 	else {
-		Localizations = $.parseJSON(res["localizationsArr"]);		
+		Localizations = $.parseJSON(res["localizationArr"]);		
 		Tags = $.parseJSON(res["tags"]);
 	}
     
@@ -141,21 +142,47 @@ function showMap(startTime, endTime, time, DELIMITER){
 	if (valid) {
 		for (var tag = 0; tag < Tags.length; tag++) {
 		    var j=0;
-			for (var i = startTime; i < endTime+1; i=i+DELIMITER) {
-		        var newMark = {lat: Localizations[tag][j][1], lng: Localizations[tag][j][2]};
+		    var path =[];
+		    var locals = Localizations[tag];
+			for (x in locals) {
+				local = locals[x];
+		        var newMark = {lat: local[1], lng: local[2]};
+		        path.push(newMark);
 		        var color;
-		        if (tag%3 == 0){
-			        color = rgbToHex(70-(j*70/len),80+(j*70/len),70-(j*70/len));
+		        if (tag%5 == 0){
+			        color = rgbToHex(219,58,58);
 		        }
-		        if (tag%3 == 1){
-			        color = rgbToHex(80+(j*70/len),70-(j*70/len),70-(j*70/len));
+		        if (tag%5 == 1){
+			        color = rgbToHex(96,58,219);
 		        }
-		        if (tag%3 == 2){
-			        color = rgbToHex(70-(j*70/len),70-(j*70/len),80+(j*70/len));
+		        if (tag%5 == 2){
+			        color = rgbToHex(35,193,53);
 		        }
-		        initialize(newMark, color, i, Tags(tag));
+		        if (tag%5 == 3){
+			        color = rgbToHex(185,61,199);
+		        }
+		        if (tag%5 == 4){
+			        color = rgbToHex(255,171,42);
+		        }
+		        initialize(newMark, color, local[0], Tags[tag]);
 		        j++;
 		    }
+			if (tag%5 == 0){
+				addPolyline(path, map, rgbToHex(219,58,58), time, Tags[tag]);
+	        }
+	        if (tag%5 == 1){
+				addPolyline(path, map, rgbToHex(96,58,219), time, Tags[tag]);
+	        }
+	        if (tag%5 == 2){
+				addPolyline(path, map, rgbToHex(35,193,53), time, Tags[tag]);
+	        }
+	        if (tag%5 == 3){
+				addPolyline(path, map, rgbToHex(185,61,199), time, Tags[tag]);
+	        }
+	        if (tag%5 == 4){
+				addPolyline(path, map, rgbToHex(255,171,42), time, Tags[tag]);
+	        }
+
 		}
 	}
 	else {

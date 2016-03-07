@@ -89,20 +89,13 @@ public class DetectionsReader {
 			return null;
 		}
 
-		finally {
-			try {
-				connection.mConn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 	public String getDETECTIONSbyTime(int count, long startTime, long endTime) {
 		if (count < 1)
 			return null;
 		String arrString = "";
 
-		try {
+		
 			
 			if (startTime >= 0 && startTime <= System.currentTimeMillis() && endTime >= 0 && endTime <= System.currentTimeMillis())
 			{
@@ -115,17 +108,7 @@ public class DetectionsReader {
 				}
 				arrString += "]";
 			}
-		}
 		
-		finally {
-			try {
-				if (connection.isConnected())
-					connection.mConn.close();				
-				return arrString;
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
 		return arrString;
 
 	}

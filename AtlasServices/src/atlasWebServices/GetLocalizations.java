@@ -23,7 +23,7 @@ public class GetLocalizations extends HttpServlet
 {
     private static final int LIMIT = 1000;
 	private static final long serialVersionUID = 1L;
-	private LocalizationsReader localizationsReader = new LocalizationsReader();
+	private LocalizationsReader localizationsReader;
 	private QueryStringParser paramParser;
 
 	public GetLocalizations() {
@@ -53,6 +53,8 @@ public class GetLocalizations extends HttpServlet
 			return;
 		}
 
+		localizationsReader = new LocalizationsReader();
+		
 		try {
 			localizationArr = localizationsReader.getLocalizationsByTime(LIMIT, startTime, endTime);
 		} catch (Exception e) {

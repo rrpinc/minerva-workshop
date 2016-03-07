@@ -14,6 +14,7 @@
 	var endTime;
 	var map;
 	var refreshIntervalId;
+	var prevColor;
 	</script>
 	<script src="atlasMain.js"></script>
     <script src="atlas.min.js"></script>
@@ -65,11 +66,29 @@ function initialize(newMark, color, time, tag) {
   addMarker(newMark, map, color, time, tag);
 }
 
+function addPolyline(planCoordinates, map, color, time, tag) {
+	
+    var flightPath = new google.maps.Polyline({
+      path: planCoordinates,
+      geodesic: true,
+      strokeColor: color,
+      strokeOpacity: 1.0,
+      strokeWeight: 2
+    });
+
+    flightPath.setMap(map);
+}
 // Adds a marker to the map.
 function addMarker(location, map, color, time, tag) {
   // Add the marker at the clicked location, and add the next-available label
   // from the array of alphabetical characters.
-  var pinImage = new google.maps.MarkerImage("http://www.googlemapsmarkers.com/v1/"+color +"/");  
+  try {
+	  var pinImage = new google.maps.MarkerImage("http://www.googlemapsmarkers.com/v1/"+color +"/"); 
+	  prevColor = color;
+  }
+  catch (err){
+	  var pinImage = new google.maps.MarkerImage("http://www.googlemapsmarkers.com/v1/"+prevColor +"/"); 
+  }
   var display = '<center>'+'Tag: '+ tag + '<br>Date:'+(new Date(time)).toLocaleString()+'</center>';
   
   var infowindow = new google.maps.InfoWindow({
@@ -172,7 +191,7 @@ function addMarker(location, map, color, time, tag) {
 			<button id="refreshButton">show data</button>
 			
 		<br>
-		<input type="radio" name="method" value="minutes" onclick="check()"> Show the last <input type="number" id="minutes" style="width: 50px;" min="0" max="20" value="0"> minutes
+		<input type="radio" name="method" value="minutes" onclick="check()"> Show the last <input type="number" id="minutes" style="width: 50px;" min="0" max="2000" value="0"> minutes
 		</form>
         </font>
       </div>

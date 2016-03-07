@@ -19,7 +19,8 @@ public class LocalizationsReader extends DBConnection {
 	private DBConnection connection;
 	private List<Long> avaliableTags;
 
-	public LocalizationsReader(){
+	public LocalizationsReader(){	
+		avaliableTags = new ArrayList<Long>();
 	}
 	
 	public String getAvailableTagsString(){
@@ -86,7 +87,7 @@ public class LocalizationsReader extends DBConnection {
 	public ArrayList<Localization> getLocalizationsByTimeDelta(long start ,long end, long tag) throws SQLException
 	{
 		
-		if ((end-start)/1000L < 1)
+		if ((end-start) < 1)
 			return new ArrayList<Localization>();
 
 		try
@@ -94,7 +95,7 @@ public class LocalizationsReader extends DBConnection {
 			String tagSelector = (tag > 0) ? "TAG = " + tag + " AND ": "";
 			
 			String query =
-				"SELECT * FROM LOCALIZATIONS WHERE " + tagSelector + "TIME >= " + start/1000L + " AND TIME <= " + end/1000L + " ORDER BY TIME DESC LIMIT 2000";
+				"SELECT * FROM LOCALIZATIONS WHERE " + tagSelector + "TIME >= " + start + " AND TIME <= " + end + " ORDER BY TIME DESC LIMIT 2000";
 			
 			return Read(query);
 		}
@@ -114,7 +115,7 @@ public class LocalizationsReader extends DBConnection {
 			
 			if (!connection.isConnected())
 			{
-				return null;
+				return new ArrayList<Localization>();
 			}
 			
 			Statement st = connection.mConn.createStatement();
@@ -181,14 +182,13 @@ public class LocalizationsReader extends DBConnection {
 				
 			}
 			
-			Date time = null;
-			if (time_parse != 0)
-				time = new Date((time_parse * 1000L));
-			Localization tmp = new Localization(rs.getLong("ID"),
+			long timeInMillis = Long.parseLong(rs.getString("TIME"));
+			Date time = new Date((timeInMillis));
+			Localization tmp = new Localization(
 					rs.getLong("TAG"), rs.getLong("TX"),
 					rs.getString("TIME"), rs.getDouble("X"),
 					rs.getDouble("Y"), rs.getDouble("Z"),
-					rs.getInt("STATIONS_NUM"), wgs84[0], wgs84[1], time);
+					wgs84[0], wgs84[1], time);
 			result.add(tmp);
 		}
 		
@@ -206,7 +206,7 @@ public class LocalizationsReader extends DBConnection {
 			
 			if (startTime >= 0 && startTime <= System.currentTimeMillis() && endTime >= 0 && endTime <= System.currentTimeMillis())
 			{
-				localizationsbytime = this.getLocalizationsByTimeDelta(startTime-500, startTime+500, -1);
+				localizationsbytime = this.getLocalizationsByTimeDelta(startTime, endTime, -1);
 				Map<Long, List<Localization>> localizationsByTags = new HashMap<Long, List<Localization>>();
 				List<Localization> l;
 
@@ -216,30 +216,41 @@ public class LocalizationsReader extends DBConnection {
 						avaliableTags.add(localizationsbytime.get(j).tag);
 	                	localizationsByTags.put(localizationsbytime.get(j).tag, l=new ArrayList<Localization>());
 	                }
-	                l.add(localizationsbytime.get(j));
+	                localizationsByTags.get(localizationsbytime.get(j).tag).add(localizationsbytime.get(j));
 				}
 				
 				arrString+= "[";
 
-				for (int j = 0; j<localizationsByTags.size(); j++){
+				int j=0;
+				for (Long tag : localizationsByTags.keySet()){
 					arrString+= (j==0? "[": ",[");
 					i=0;
-					for (long t = startTime; t<=endTime; t+=TIME_DELIMITER){
+					List<Localization> tagLocalizations = localizationsByTags.get(tag);
+					for (Localization loc : tagLocalizations){
 						arrString += (i==0? "[": ",[");
-						arrString += localizationsbytime.get(i).dateTime + "," + localizationsbytime.get(i).latitude + "," +localizationsbytime.get(i).longtitude;
+						if (i<localizationsbytime.size()){
+							arrString += loc.dateTime.getTime() + "," + loc.latitude + "," +loc.longtitude;
+						}
+						else {
+							break;
+						}
 						arrString += "]";
 						i++;
 					}
 					
 					arrString += "]";
+					j++;
 				}
 				
 				arrString += "]";
 			}
 		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
 		finally {
 			try {
-				if (connection.isConnected())
+				if (connection != null && connection.isConnected())
 					connection.mConn.close();				
 				return arrString;
 			} catch (SQLException e) {
