@@ -15,6 +15,7 @@
 	var map;
 	var refreshIntervalId;
 	var prevColor;
+	var markers = [];
 	</script>
 	<script src="atlasMain.js"></script>
     <script src="atlas.min.js"></script>
@@ -82,6 +83,7 @@ function addPolyline(planCoordinates, map, color, time, tag) {
 function addMarker(location, map, color, time, tag) {
   // Add the marker at the clicked location, and add the next-available label
   // from the array of alphabetical characters.
+  
   try {
 	  var pinImage = new google.maps.MarkerImage("http://www.googlemapsmarkers.com/v1/"+color +"/"); 
 	  prevColor = color;
@@ -102,6 +104,25 @@ function addMarker(location, map, color, time, tag) {
   marker.addListener('click', function() {
 	    infowindow.open(map, marker);
 	  });
+  markers.push(marker);
+
+}
+//Sets the map on all markers in the array.
+function setMapOnAll(map) {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+  }
+}
+
+// Removes the markers from the map, but keeps them in the array.
+function clearMarkers() {
+  setMapOnAll(null);
+}
+
+// Deletes all markers in the array by removing references to them.
+function deleteMarkers() {
+  clearMarkers();
+  markers = [];
 }
 
     </script>

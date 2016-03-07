@@ -62,7 +62,7 @@ function parseYMDHM(s) {
   return new Date(b[0], --b[1], b[2], b[3], b[4], b[5]||0, b[6]||0);
 }
 function refreshData(){
-					   
+	deleteMarkers();
 	localStorage.setItem('toShow', "true");
 	clearInterval(refreshIntervalId);
 	var method = $('input[name=method]:checked').val();
@@ -104,7 +104,7 @@ function initMap() {
 	 if (localStorage.getItem('activeTab') == "#Map" && localStorage.getItem('toShow') == "true"){
 		map = new google.maps.Map(document.getElementById('google_map'), {
 		      center: {lat: 33.120675660801325, lng: 35.59343085169261},
-		      zoom: 15
+		      zoom: 12
 		   });	 
 		localStorage.setItem('map_init', "yes");
 
